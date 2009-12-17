@@ -1,6 +1,8 @@
 require 'rubygems' if RUBY_VERSION < '1.9'
+# try to help sane gem out a bit
+$: << File.dirname(__FILE__) + '/../lib'
+require 'os'
 require 'sane'
-require_rel '../lib/os'
 require 'spec/autorun'
 
 describe "OS" do
@@ -8,9 +10,13 @@ describe "OS" do
   it "has a windows? method" do
     if RUBY_PLATFORM =~ /mingw|mswin/
       assert OS.windows? == true
-    else
-     puts OS.windows?
-      assert OS.windows? == false
+      assert OS.windoze? == true
+      assert OS.linux? == false
+    else # ltodo jruby
+      if RUBY_PLATFORM =~ /linux/
+        assert OS.windows? == false
+        assert OS.linux? == true
+      end
     end
   end
 

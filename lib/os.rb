@@ -4,8 +4,10 @@ class OS
  host_os = RbConfig::CONFIG['host_os']
  if host_os =~ /mswin|mingw/
    WINDOZE = true
+   LINUX = false
  else
    WINDOZE = false
+   LINUX = true
  end
 
  # OS.windows?
@@ -13,6 +15,14 @@ class OS
  # false if on linux or cygwin
  def self.windows?
   WINDOZE
+ end
+
+ def self.linux?
+  LINUX
+ end
+
+ class << self
+   alias :windoze? :windows? #the joke one
  end
 
  if host_os =~ /32/

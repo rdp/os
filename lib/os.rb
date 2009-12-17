@@ -4,10 +4,8 @@ class OS
  host_os = RbConfig::CONFIG['host_os']
  if host_os =~ /mswin|mingw/
    WINDOZE = true
-   LINUX = false
  else
    WINDOZE = false
-   LINUX = true
  end
 
  # OS.windows?
@@ -18,7 +16,7 @@ class OS
  end
 
  def self.linux?
-  LINUX
+  !WINDOZE
  end
 
  class << self

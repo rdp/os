@@ -22,9 +22,9 @@ describe "OS" do
 
   it "should know if you're on java" do
     if RUBY_PLATFORM == 'java'
-      assert OS.java?
+      assert OS.java? == true
     else
-      assert !OS.java?
+      assert OS.java? == false
     end
   end
 end

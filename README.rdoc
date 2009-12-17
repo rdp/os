@@ -10,6 +10,9 @@ require 'os'
 >> OS.bits
 => 32
 
+>> OS.java?
+=> true
+
 If there are any other features you'd like, let me know.
 
 github.com/rdp/os

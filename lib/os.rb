@@ -35,7 +35,11 @@ class OS
  end
 
  def self.java?
-   RUBY_PLATFORM =~ /java/
+   if RUBY_PLATFORM =~ /java/
+     true
+   else
+     false
+   end
  end
 
 end

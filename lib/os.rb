@@ -2,7 +2,11 @@ class OS
 
  require 'rbconfig'
  host_os = RbConfig::CONFIG['host_os']
- WINDOZE = true if host_os =~ /mswin|mingw/
+ if host_os =~ /mswin|mingw/
+   WINDOZE = true
+ else
+   WINDOZE = false
+ end
 
  # OS.windows?
  # true if on windows [and/or jruby]
@@ -14,12 +18,24 @@ class OS
  if host_os =~ /32/
    BITS = 32
  else
-   raise unless host_os =~ /64/
-   BITS = 64
+   if host_os =~ /64/
+    BITS = 64
+   else # cygwin
+    if (1<<32).class == Fixnum
+      BITS = 64
+    else
+      BITS = 32
+    end
+  end
  end
+
 
  def self.bits
   BITS
+ end
+
+ def self.java?
+   RUBY_PLATFORM =~ /java/
  end
 
 end

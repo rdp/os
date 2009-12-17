@@ -1,7 +1,20 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require 'sane'
+require_rel '../lib/os'
+require 'spec/autorun'
 
-describe "Os" do
-  it "fails" do
-    fail "hey buddy, you should probably rename this file and start specing for real"
+describe "OS" do
+
+  it "has a windows? method" do
+    if RUBY_PLATFORM =~ /mingw|mswin/
+      assert OS.windows? == true
+    else
+      assert OS.windows? == false
+    end
+  end
+
+  it "has a bits method" do
+    if RUBY_PLATFORM =~ /mingw32/
+       assert OS.bits == 32
+    end
   end
 end

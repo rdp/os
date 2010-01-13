@@ -1,53 +1,70 @@
 class OS
 
- require 'rbconfig'
- host_os = RbConfig::CONFIG['host_os']
- if host_os =~ /mswin|mingw/
-   WINDOZE = true
- else
-   WINDOZE = false
- end
+  # treat cygwin as linux
+  # also treat IronRuby on mono as...linux
 
- # OS.windows?
- # true if on windows [and/or jruby]
- # false if on linux or cygwin
- def self.windows?
-  WINDOZE
- end
 
- def self.linux?
-  !WINDOZE
- end
+  # OS.windows?
+  # true if on windows [and/or jruby]
+  # false if on linux or cygwin
+  def self.windows?
+    @windows ||= begin
+      if RUBY_PLATFORM =~ /cygwin/ # i386-cygwin
+        false
+      elsif ENV['OS'] == 'Windows_NT'
+        true
+      else
+        false
+      end
+    end
 
- class << self
-   alias :windoze? :windows? #the joke one
- end
+  end
 
- if host_os =~ /32/
-   BITS = 32
- else
-   if host_os =~ /64/
-    BITS = 64
-   else # cygwin
-    if (1<<32).class == Fixnum
-      BITS = 64
-    else
-      BITS = 32
+  # true for linux, os x, cygwin
+  def self.posix?
+    !OS.windows?
+  end
+
+  class << self
+    alias :doze? :windows? # a joke but I use it
+  end
+
+  def self.bits
+    @bits ||= begin
+      require 'rbconfig'
+      host_os = RbConfig::CONFIG['host_os']
+      if host_os =~ /32/
+        32
+      else
+        if host_os =~ /64/
+          64
+        else # cygwin...
+          if (1<<32).class == Fixnum
+            64
+          else
+            32
+          end
+        end
+      end
     end
   end
- end
 
 
- def self.bits
-  BITS
- end
-
- def self.java?
-   if RUBY_PLATFORM =~ /java/
-     true
-   else
-     false
-   end
- end
-
+  def self.java?
+    @java ||= begin
+      if RUBY_PLATFORM =~ /java/
+        true
+      else
+        false
+      end
+    end
+  end
+  
+  def self.ruby_exe
+    @ruby_exe ||= begin
+      require 'rbconfig'
+      config = RbConfig::CONFIG
+      File::join(config['bindir'], config['ruby_install_name']) + config['EXEEXT']
+    end
+  end
 end

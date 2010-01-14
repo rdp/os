@@ -22,7 +22,25 @@ class OS
 
   # true for linux, os x, cygwin
   def self.posix?
-    !OS.windows?
+    @posix ||=
+    begin
+      if OS.windows?
+        begin
+          begin
+            # what if we're on interix...
+            # untested, of course
+            Process.wait fork{}
+            true
+          rescue NotImplementedError
+            false
+          end
+      end
+     else
+       # assume non windows is posix 
+       true
+     end
+    end
+    
   end
 
   class << self
@@ -60,7 +78,7 @@ class OS
     end
   end
   
-  def self.ruby_exe
+  def self.ruby_bin
     @ruby_exe ||= begin
       require 'rbconfig'
       config = RbConfig::CONFIG

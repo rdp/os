@@ -8,7 +8,7 @@ describe "OS" do
   it "has a windows? method" do
     if RUBY_PLATFORM =~ /mingw|mswin/
       assert OS.windows? == true
-      assert OS.windoze? == true
+      assert OS.doze? == true
       assert OS.posix? == false
     else # ltodo jruby
       if RUBY_PLATFORM =~ /linux/
@@ -34,7 +34,7 @@ describe "OS" do
   
   it "should have a ruby.exe method" do
     if OS.windows?
-      assert OS.ruby_exe.include? 'ruby.exe'
+      assert OS.ruby_bin.include? 'ruby.exe'
     else
       OS.ruby
     end

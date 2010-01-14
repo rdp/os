@@ -1,6 +1,3 @@
-OS
-
-
 The OS gem allows for some easy telling if you're on windows or not.
 
 require 'os'
@@ -13,7 +10,17 @@ require 'os'
 >> OS.java?
 => true
 
+>> OS.ruby_exe
+=> "c:\ruby18\bin\ruby.exe" # or "/usr/local/bin/ruby" or what not
+
+>> OS.posix?
+=> false
+
 If there are any other features you'd like, let me know.
 
 github.com/rdp/os
 
+
+Related:
+Gem.ruby
+Platform gem

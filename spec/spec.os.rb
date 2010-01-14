@@ -34,9 +34,9 @@ describe "OS" do
   
   it "should have a ruby.exe method" do
     if OS.windows?
-      assert OS.ruby_bin.include? 'ruby.exe'
+      assert OS.ruby_bin.include?('ruby.exe')
     else
-      OS.ruby
+      assert OS.ruby_bin.include?('ruby') && OS.ruby_bin.include?('/')
     end
   end
   

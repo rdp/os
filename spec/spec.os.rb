@@ -1,6 +1,7 @@
 require 'rubygems' if RUBY_VERSION < '1.9'
-require File.dirname(__FILE__) + '/../lib/os' # load before sane
+require File.dirname(__FILE__) + '/../lib/os.rb' # load before sane
 require 'sane'
+load File.dirname(__FILE__) + '/../lib/os.rb'
 require 'spec/autorun'
 
 describe "OS" do
@@ -26,6 +27,9 @@ describe "OS" do
     elsif RUBY_PLATFORM =~ /i686/
        assert OS.bits == 32
     elsif RUBY_PLATFORM =~ /java/ && RbConfig::CONFIG['host_os'] =~ /32$/
+       assert OS.bits == 32
+    elsif RUBY_PLATFORM =~ /java/ && RbConfig::CONFIG['host_cpu'] =~ /i386/
+puts OS.bits
        assert OS.bits == 32
     else      
        pending "os bits not tested!" + RUBY_PLATFORM + ' ' +  RbConfig::CONFIG['host_os'] 

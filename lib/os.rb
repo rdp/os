@@ -34,13 +34,13 @@ class OS
           rescue NotImplementedError
             false
           end
+        end
+      else
+        # assume non windows is posix
+        true
       end
-     else
-       # assume non windows is posix 
-       true
-     end
     end
-    
+
   end
 
   class << self
@@ -50,18 +50,15 @@ class OS
   def self.bits
     @bits ||= begin
       require 'rbconfig'
-      host_os = RbConfig::CONFIG['host_os']
-      if host_os =~ /32/
+      if RbConfig::CONFIG['host_cpu'] =~ /_64$/ # x86_64
+        64
+      elsif RbConfig::CONFIG['host_os'] =~ /32$/ # mingw32, mswin32
         32
-      else
-        if host_os =~ /64/
+      else # cygwin only...I think
+        if 1.size == 8
           64
-        else # cygwin...
-          if (1<<32).class == Fixnum
-            64
-          else
-            32
-          end
+        else
+          32
         end
       end
     end
@@ -77,7 +74,7 @@ class OS
       end
     end
   end
-  
+
   def self.ruby_bin
     @ruby_exe ||= begin
       require 'rbconfig'
@@ -85,4 +82,9 @@ class OS
       File::join(config['bindir'], config['ruby_install_name']) + config['EXEEXT']
     end
   end
+  
+  def self.mac?
+     RUBY_PLATFORM =~ /darwin/  
+  end
+  
 end

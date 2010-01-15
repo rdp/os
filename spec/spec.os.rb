@@ -40,4 +40,12 @@ describe "OS" do
     end
   end
   
+  it "should have a mac? method" do
+    if RUBY_PLATFORM =~ /darwin/
+      assert OS.mac?
+    else
+      assert !OS.mac?
+    end
+  end
+  
 end

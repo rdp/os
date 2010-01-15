@@ -23,7 +23,12 @@ describe "OS" do
        assert OS.bits == 32
     elsif RUBY_PLATFORM =~ /64/ # linux...
        assert OS.bits == 64 
+    elsif RUBY_PLATFORM =~ /i686/
+       assert OS.bits == 32
+    else
+       pending "os bits not tested!" + RUBY_PLATFORM
     end
+
   end
 
   it "should know if you're on java" do

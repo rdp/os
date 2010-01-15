@@ -25,6 +25,12 @@ github.com/rdp/os
 
 Related:
 
-Gem.ruby method
+rubygems:
+Gem::Platform.local
+Gem.ruby
+
+facets gem (similar)
+require 'facets/platform'
+Platform.local
 
 the Platform gem

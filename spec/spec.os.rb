@@ -21,6 +21,8 @@ describe "OS" do
   it "has a bits method" do
     if RUBY_PLATFORM =~ /mingw32/
        assert OS.bits == 32
+    elsif RUBY_PLATFORM =~ /64/ # linux...
+       assert OS.bits == 64 
     end
   end
 

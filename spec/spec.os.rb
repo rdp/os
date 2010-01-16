@@ -30,6 +30,8 @@ describe "OS" do
        assert OS.bits == 32
     elsif RUBY_PLATFORM =~ /java/ && RbConfig::CONFIG['host_cpu'] =~ /i386/
        assert OS.bits == 32
+    elsif RUBY_PLATFORM =~ /i386/
+      assert OS.bits == 32
     else      
        pending "os bits not tested!" + RUBY_PLATFORM + ' ' +  RbConfig::CONFIG['host_os'] 
     end

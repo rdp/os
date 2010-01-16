@@ -1,10 +1,8 @@
+# a set of friendly files for determining your Ruby runtime
+# treats cygwin as linux
+# also treats IronRuby on mono as...linux
 class OS
 
-  # treat cygwin as linux
-  # also treat IronRuby on mono as...linux
-
-
-  # OS.windows?
   # true if on windows [and/or jruby]
   # false if on linux or cygwin
   def self.windows?
@@ -50,8 +48,11 @@ class OS
   def self.bits
     @bits ||= begin
       require 'rbconfig'
-      if RbConfig::CONFIG['host_cpu'] =~ /_64$/ # x86_64
+      host_cpu = RbConfig::CONFIG['host_cpu']
+      if host_cpu =~ /_64$/ # x86_64
         64
+      elsif host_cpu == 'i386'
+        32
       elsif RbConfig::CONFIG['host_os'] =~ /32$/ # mingw32, mswin32
         32
       elsif RUBY_PLATFORM == 'java' && ENV_JAVA['sun.arch.data.model'] # "32" or "64" http://www.ruby-forum.com/topic/202173#880613

@@ -51,13 +51,12 @@ class OS
       host_cpu = RbConfig::CONFIG['host_cpu']
       if host_cpu =~ /_64$/ # x86_64
         64
+      elsif RUBY_PLATFORM == 'java' && ENV_JAVA['sun.arch.data.model'] # "32" or "64" http://www.ruby-forum.com/topic/202173#880613
+         ENV_JAVA['sun.arch.data.model'].to_i
       elsif host_cpu == 'i386'
         32
       elsif RbConfig::CONFIG['host_os'] =~ /32$/ # mingw32, mswin32
         32
-      elsif RUBY_PLATFORM == 'java' && ENV_JAVA['sun.arch.data.model'] # "32" or "64" http://www.ruby-forum.com/topic/202173#880613
-        puts 'using it'
-         ENV_JAVA['sun.arch.data.model'].to_i
       else # cygwin only...I think
         if 1.size == 8
           64

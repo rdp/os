@@ -77,18 +77,11 @@ describe "OS" do
     end
   end
 
-  unless RUBY_PLATFORM =~ /java/
-    it "should have a way to get rss_bytes on each platform" do
-      bytes = OS.rss_bytes
-      assert bytes > 0 # should always be true
-      assert bytes.is_a?(Numeric) # don't want strings from any platform...
-    end
-  else
-    it "should raise a StandardError in java on doze for now" do
-      if OS.windows?
-        proc { OS.rss_bytes}.should raise_exception(StandardError)
-      end
-    end
+  it "should have a way to get rss_bytes on each platform" do
+    bytes = OS.rss_bytes
+    assert bytes > 0 # should always be true
+    assert bytes.is_a?(Numeric) # don't want strings from any platform...
   end
+
 
 end

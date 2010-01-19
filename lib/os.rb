@@ -89,23 +89,37 @@ class OS
   def self.mac?
     RUBY_PLATFORM =~ /darwin/
   end
-
+  
   # amount of memory the current process "is using", in RAM
   # (doesn't include any swap memory that it may be using, just that in actual RAM)
+  # raises 'unknown' on jruby currently
   def self.rss_bytes
     # attempt to do this in a jruby friendly way
-    if OS.windows?
-      require 'win32ole'
+    if OS::Underlying.windows?
+      begin
+        require 'win32ole'
+      rescue LoadError
+        raise 'unknown rss for this platform'
+      end
       wmi = WIN32OLE.connect("winmgmts://")
       processes = wmi.ExecQuery("select * from win32_process where ProcessId = #{Process.pid}")
       memory_used = nil
       # only allow for one...
       for process in processes; raise if memory_used; memory_used = process.WorkingSetSize.to_i; end
-    else
+      memory_used
+    elsif OS.posix? # assume linux
       kb = `ps -o rss= -p #{Process.pid}`.to_i # in kilobytes
-      memory_used = kb*1024
+    else
+      raise 'unknown rss for this platform'
     end
-    memory_used
+  end
+  
+  class Underlying
+    
+    def self.windows?
+      ENV['OS'] == 'Windows_NT'
+    end      
+    
   end
 
 end

@@ -1,4 +1,5 @@
 require 'rubygems' if RUBY_VERSION < '1.9'
+require 'fast_require'
 require File.dirname(__FILE__) + '/../lib/os.rb' # load before sane
 require 'sane'
 load File.dirname(__FILE__) + '/../lib/os.rb'
@@ -60,6 +61,10 @@ describe "OS" do
     else
       assert !OS.mac?
     end
+  end
+  
+  it "should have a way to get rss_bytes on each platform" do
+  	assert OS.rss_bytes > 0 # should always be true  	
   end
   
 end

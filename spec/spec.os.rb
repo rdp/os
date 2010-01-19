@@ -4,6 +4,7 @@ require File.dirname(__FILE__) + '/../lib/os.rb' # load before sane
 require 'sane'
 load File.dirname(__FILE__) + '/../lib/os.rb'
 require 'spec/autorun'
+require 'rbconfig'
 
 describe "OS" do
 
@@ -19,7 +20,7 @@ describe "OS" do
         assert OS.posix? == true
       end
       assert OS::Underlying.windows?
-    elsif RUBY_PLATFORM =~ /linux/
+    elsif (RbConfig::CONFIG["host_os"] == 'linux') || RUBY_PLATFORM =~ /linux/
       assert OS.windows? == false
       assert OS.posix? == true
       assert !OS::Underlying.windows?
@@ -83,8 +84,10 @@ describe "OS" do
       assert bytes.is_a?(Numeric) # don't want strings from any platform...
     end
   else
-    it "should raise a StandardError in java for now" do
-      proc { OS.rss_bytes}.should raise_exception(StandardError)
+    it "should raise a StandardError in java on doze for now" do
+      if OS.windows?
+        proc { OS.rss_bytes}.should raise_exception(StandardError)
+      end
     end
   end
 

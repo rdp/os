@@ -52,7 +52,7 @@ class OS
       if host_cpu =~ /_64$/ # x86_64
         64
       elsif RUBY_PLATFORM == 'java' && ENV_JAVA['sun.arch.data.model'] # "32" or "64" http://www.ruby-forum.com/topic/202173#880613
-         ENV_JAVA['sun.arch.data.model'].to_i
+        ENV_JAVA['sun.arch.data.model'].to_i
       elsif host_cpu == 'i386'
         32
       elsif RbConfig::CONFIG['host_os'] =~ /32$/ # mingw32, mswin32
@@ -85,9 +85,27 @@ class OS
       File::join(config['bindir'], config['ruby_install_name']) + config['EXEEXT']
     end
   end
-  
+
   def self.mac?
-     RUBY_PLATFORM =~ /darwin/  
+    RUBY_PLATFORM =~ /darwin/
   end
-  
+
+  # amount of memory the current process "is using", in RAM
+  # (doesn't include any swap memory that it may be using, just that in actual RAM)
+  def self.rss_bytes
+    # attempt to do this in a jruby friendly way
+    if OS.windows?
+      require 'win32ole'
+      wmi = WIN32OLE.connect("winmgmts://")
+      processes = wmi.ExecQuery("select * from win32_process where ProcessId = #{Process.pid}")
+      memory_used = nil
+      # only allow for one...
+      for process in processes; raise if memory_used; memory_used = process.WorkingSetSize.to_i; end
+    else
+      kb = `ps -o rss= -p #{Process.pid}`.to_i # in kilobytes
+      memory_used = kb*1024
+    end
+    memory_used
+  end
+
 end

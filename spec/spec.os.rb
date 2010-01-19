@@ -66,8 +66,7 @@ describe "OS" do
   it "should have a way to get rss_bytes on each platform" do
   	bytes = OS.rss_bytes
   	assert bytes > 0 # should always be true  	
-  	assert bytes.is_a? Numeric # don't want strings on any platform
-  	puts bytes
+  	assert bytes.is_a?(Numeric) # don't want strings from any platform...
   end
   
 end

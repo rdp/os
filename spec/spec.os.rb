@@ -47,6 +47,14 @@ describe "OS" do
     end
 
   end
+  
+  it "should have an iron_ruby method" do
+    if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'ironruby'
+      assert OS.iron_ruby? == true
+    else
+      assert OS.iron_ruby? == false
+    end
+  end
 
   it "should know if you're on java" do
     if RUBY_PLATFORM == 'java'
@@ -58,7 +66,12 @@ describe "OS" do
 
   it "should have a ruby_bin method" do
     if OS.windows?
-      assert OS.ruby_bin.include?('ruby.exe')
+      assert OS.ruby_bin.include?('.exe')
+      if OS.iron_ruby?
+        assert OS.ruby_bin.include?('ir.exe')
+      else
+        assert OS.ruby_bin.include?('ruby.exe')
+      end
     else
       assert OS.ruby_bin.include?('ruby') && OS.ruby_bin.include?('/')
     end
@@ -68,19 +81,29 @@ describe "OS" do
     end
 
   end
+  
+  it "should have a cygwin? method" do
+    if RUBY_PLATFORM =~ /cygwin/
+      assert OS.cygwin? == true
+    else
+      assert OS.cygwin? == false
+    end
+  end
 
   it "should have a mac? method" do
     if RUBY_PLATFORM =~ /darwin/
-      assert OS.mac?
+      assert OS.mac? == true
     else
-      assert !OS.mac?
+      assert OS.mac? == false
     end
   end
 
   it "should have a way to get rss_bytes on each platform" do
-    bytes = OS.rss_bytes
-    assert bytes > 0 # should always be true
-    assert bytes.is_a?(Numeric) # don't want strings from any platform...
+    if !OS.iron_ruby?
+      bytes = OS.rss_bytes
+      assert bytes > 0 # should always be true
+      assert bytes.is_a?(Numeric) # don't want strings from any platform...
+    end
   end
 
 

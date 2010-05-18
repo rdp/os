@@ -29,7 +29,7 @@ class OS
             # untested, of course
             Process.wait fork{}
             true
-          rescue NotImplementedError
+          rescue NotImplementedError, NoMethodError
             false
           end
         end
@@ -43,6 +43,16 @@ class OS
 
   class << self
     alias :doze? :windows? # a joke but I use it
+  end
+  
+  def self.iron_ruby?
+   @iron_ruby ||= begin
+     if defined?(RUBY_ENGINE) && (RUBY_ENGINE == 'ironruby')
+       true
+     else
+       false
+     end
+   end
   end
 
   def self.bits
@@ -87,7 +97,13 @@ class OS
   end
 
   def self.mac?
-    RUBY_PLATFORM =~ /darwin/
+    @mac = begin
+      if RUBY_PLATFORM =~ /darwin/
+        true
+      else
+        false
+      end
+    end      
   end
 
   # amount of memory the current process "is using", in RAM
@@ -96,25 +112,27 @@ class OS
   def self.rss_bytes
     # attempt to do this in a jruby friendly way
     if OS::Underlying.windows?
+      # MRI, Java, IronRuby, Cygwin
       if OS.java?
-        # no win32ole...
+        # no win32ole yet available...
         require 'java'
         mem_bean = java.lang.management.ManagementFactory.memory_mxbean
         mem_bean.heap_memory_usage.used + mem_bean.non_heap_memory_usage.used
       else
+        wmi = nil
         begin
           require 'win32ole'
-        rescue LoadError
-          raise 'unknown rss for this platform'
-        end
-        wmi = WIN32OLE.connect("winmgmts://")
+          wmi = WIN32OLE.connect("winmgmts://")
+        rescue LoadError, NoMethodError # NoMethod for IronRuby currently [sigh]
+          raise 'rss unknown for this platform'
+        end        
         processes = wmi.ExecQuery("select * from win32_process where ProcessId = #{Process.pid}")
         memory_used = nil
         # only allow for one...
         for process in processes; raise if memory_used; memory_used = process.WorkingSetSize.to_i; end
         memory_used
       end
-    elsif OS.posix? # assume linux
+    elsif OS.posix? # assume linux I guess...
       kb = `ps -o rss= -p #{Process.pid}`.to_i # in kilobytes
     else
       raise 'unknown rss for this platform'
@@ -127,6 +145,16 @@ class OS
       ENV['OS'] == 'Windows_NT'
     end
 
+  end
+  
+  def self.cygwin?
+    @cygwin = begin
+      if RUBY_PLATFORM =~ /-cygwin/
+        true
+      else
+        false
+      end
+    end
   end
 
 end

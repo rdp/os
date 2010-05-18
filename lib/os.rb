@@ -61,7 +61,7 @@ class OS
       host_cpu = RbConfig::CONFIG['host_cpu']
       if host_cpu =~ /_64$/ # x86_64
         64
-      elsif RUBY_PLATFORM == 'java' && ENV_JAVA['sun.arch.data.model'] # "32" or "64" http://www.ruby-forum.com/topic/202173#880613
+      elsif RUBY_PLATFORM == 'java' && ENV_JAVA['sun.arch.data.model'] # "32" or "64":http://www.ruby-forum.com/topic/202173#880613
         ENV_JAVA['sun.arch.data.model'].to_i
       elsif host_cpu == 'i386'
         32
@@ -132,7 +132,7 @@ class OS
         for process in processes; raise if memory_used; memory_used = process.WorkingSetSize.to_i; end
         memory_used
       end
-    elsif OS.posix? # assume linux I guess...
+    elsif OS.posix? # linux [though I've heard it works in OS X]
       kb = `ps -o rss= -p #{Process.pid}`.to_i # in kilobytes
     else
       raise 'unknown rss for this platform'

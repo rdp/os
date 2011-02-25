@@ -1,6 +1,12 @@
 require 'rubygems'
 require 'rake'
 
+
+begin
+  require 'psych'
+rescue ::LoadError
+end
+
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|

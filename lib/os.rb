@@ -156,5 +156,15 @@ class OS
       end
     end
   end
+  
+   def self.dev_null
+    @dev_null ||= begin
+      if OS.windows?
+        "NUL"
+      else
+        "/dev/null"
+      end
+    end
+  end
 
 end

@@ -1,10 +1,9 @@
-require 'rubygems' if RUBY_VERSION < '1.9'
-#require 'fast_require'
-require File.dirname(__FILE__) + '/../lib/os.rb' # load before sane
+require 'rubygems' if RUBY_VERSION < '1.9.0'
+
+require File.dirname(__FILE__) + '/../lib/os.rb' # load before sane to avoid sane being able to requir the gemified version...
 require 'sane'
-load File.dirname(__FILE__) + '/../lib/os.rb'
-require 'spec/autorun'
-require 'rbconfig'
+load File.dirname(__FILE__) + '/../lib/os.rb' # just in case
+require 'rspec' # rspec2
 
 describe "OS" do
 
@@ -90,7 +89,7 @@ describe "OS" do
     end
   end
 
-  it "should have a mac? method" do
+  it "should have a functional mac? method" do
     if RUBY_PLATFORM =~ /darwin/
       assert OS.mac? == true
     else
@@ -105,6 +104,13 @@ describe "OS" do
       assert bytes.is_a?(Numeric) # don't want strings from any platform...
     end
   end
-
+  
+  it "should tell you what the right /dev/null is" do
+    if OS.windows?
+      OS.dev_null.should == "NUL"
+    else
+      OS.dev_null.should == "/dev/null"
+    end
+  end
 
 end

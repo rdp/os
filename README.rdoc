@@ -1,14 +1,14 @@
 The OS gem allows for some easy telling if you're on windows or not.
 
 require 'os'
->> OS.windows? 
-=> true
+>> OS.windows?
+=> true   # also OS.doze?
 
 >> OS.bits
 => 32
 
 >> OS.java?
-=> true
+=> true # if you're running in jruby also OS.jruby?
 
 >> OS.ruby_bin
 => "c:\ruby18\bin\ruby.exe" # or "/usr/local/bin/ruby" or what not
@@ -19,11 +19,20 @@ require 'os'
 >> OS.mac?
 => false
 
+>> OS.java? # same as OS.jruby?
+=> true
+
+>> OS.dev_null
+=> "NUL" # or "/dev/null" depending on which platform
+
+>> OS.rss_bytes
+=> 12300033 # rss bytes this process is using currently, works in Linux/windows
+
 If there are any other features you'd like, let me know.
 
-github.com/rdp/os
+github.com/rdp/os for feedback et al
 
-Related:
+Related projects:
 
 rubygems:
 Gem::Platform.local

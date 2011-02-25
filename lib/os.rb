@@ -4,7 +4,8 @@
 class OS
 
   # true if on windows [and/or jruby]
-  # false if on linux or cygwin
+  # false if on linux or cygwin on windows
+  
   def self.windows?
     @windows ||= begin
       if RUBY_PLATFORM =~ /cygwin/ # i386-cygwin
@@ -41,10 +42,6 @@ class OS
 
   end
 
-  class << self
-    alias :doze? :windows? # a joke but I use it
-  end
-  
   def self.iron_ruby?
    @iron_ruby ||= begin
      if defined?(RUBY_ENGINE) && (RUBY_ENGINE == 'ironruby')
@@ -114,17 +111,17 @@ class OS
     if OS::Underlying.windows?
       # MRI, Java, IronRuby, Cygwin
       if OS.java?
-        # no win32ole yet available...
+        # no win32ole on 1.5.x, so leave here for compatibility...maybe for awhile :P
         require 'java'
-        mem_bean = java.lang.management.ManagementFactory.memory_mxbean
+        mem_bean = java.lang.management.ManagementFactory.getMemoryMXBean
         mem_bean.heap_memory_usage.used + mem_bean.non_heap_memory_usage.used
       else
         wmi = nil
         begin
           require 'win32ole'
           wmi = WIN32OLE.connect("winmgmts://")
-        rescue LoadError, NoMethodError # NoMethod for IronRuby currently [sigh]
-          raise 'rss unknown for this platform'
+        rescue LoadError, NoMethodError => e # NoMethod for IronRuby currently [sigh]
+          raise 'rss unknown for this platform ' + e.to_s
         end        
         processes = wmi.ExecQuery("select * from win32_process where ProcessId = #{Process.pid}")
         memory_used = nil
@@ -165,6 +162,11 @@ class OS
         "/dev/null"
       end
     end
+  end
+
+  class << self
+    alias :doze? :windows? # a joke name but I use it and like it :P
+    alias :jruby? :java?
   end
 
 end

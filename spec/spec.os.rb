@@ -98,11 +98,9 @@ describe "OS" do
   end
 
   it "should have a way to get rss_bytes on each platform" do
-    if !OS.iron_ruby?
-      bytes = OS.rss_bytes
-      assert bytes > 0 # should always be true
-      assert bytes.is_a?(Numeric) # don't want strings from any platform...
-    end
+    bytes = OS.rss_bytes
+    assert bytes > 0 # should always be true
+    assert bytes.is_a?(Numeric) # don't want strings from any platform...
   end
   
   it "should tell you what the right /dev/null is" do
@@ -110,6 +108,14 @@ describe "OS" do
       OS.dev_null.should == "NUL"
     else
       OS.dev_null.should == "/dev/null"
+    end
+  end
+  
+  it "should have a jruby method" do
+    if RUBY_DESCRIPTION =~ /^(jruby|java)/
+      assert OS.jruby?
+    else
+      assert !OS.jruby?
     end
   end
 

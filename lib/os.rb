@@ -103,6 +103,10 @@ class OS
     end      
   end
 
+  def self.osx?
+    mac?
+  end
+
   # amount of memory the current process "is using", in RAM
   # (doesn't include any swap memory that it may be using, just that in actual RAM)
   # raises 'unknown' on jruby currently

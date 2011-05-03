@@ -56,7 +56,7 @@ class OS
     @bits ||= begin
       require 'rbconfig'
       host_cpu = RbConfig::CONFIG['host_cpu']
-      if host_cpu =~ /_64$/ # x86_64
+      if host_cpu =~ /_64$/ || RUBY_PLATFORM =~ /x86_64/
         64
       elsif RUBY_PLATFORM == 'java' && ENV_JAVA['sun.arch.data.model'] # "32" or "64":http://www.ruby-forum.com/topic/202173#880613
         ENV_JAVA['sun.arch.data.model'].to_i

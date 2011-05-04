@@ -95,7 +95,7 @@ class OS
 
   def self.mac?
     @mac = begin
-      if RUBY_PLATFORM =~ /darwin/
+      if RbConfig::CONFIG['host_os'] =~ /darwin/
         true
       else
         false

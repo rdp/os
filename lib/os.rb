@@ -142,6 +142,10 @@ class OS
 
   class Underlying
 
+    def self.bsd?
+      OS.osx?
+    end
+
     def self.windows?
       ENV['OS'] == 'Windows_NT'
     end

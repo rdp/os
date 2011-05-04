@@ -1,8 +1,6 @@
 require 'rubygems' if RUBY_VERSION < '1.9.0'
 
 require File.dirname(__FILE__) + '/../lib/os.rb' # load before sane to avoid sane being able to requir the gemified version...
-require 'sane'
-load File.dirname(__FILE__) + '/../lib/os.rb' # just in case
 require 'rspec' # rspec2
 
 describe "OS" do

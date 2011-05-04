@@ -1,11 +1,5 @@
-require 'rubygems'
+require 'rubygems' if RUBY_VERSION < '1.9.0'
 require 'rake'
-
-
-begin
-  require 'psych'
-rescue ::LoadError
-end
 
 begin
   require 'jeweler'
@@ -16,10 +10,9 @@ begin
     gem.email = "rogerpack2005@gmail.com"
     gem.homepage = "http://github.com/rdp/os"
     gem.authors = ["rdp", "David McCullars"]
-    gem.add_development_dependency "rspec", ">= 2.0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
-    gem.add_development_dependency "sane"
     # gem.add_development_dependency "fast_require"
+    gem.add_development_dependency "rspec", ">= 2.0"
   end
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"

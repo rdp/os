@@ -7,7 +7,7 @@ require 'rspec' # rspec2
 
 describe "OS" do
 
-  it "has a windows? method" do
+  it "identifies whether windows? or posix?" do
     if ENV['OS'] == 'Windows_NT'
       unless RUBY_PLATFORM =~ /cygwin/
         assert OS.windows? == true
@@ -19,7 +19,7 @@ describe "OS" do
         assert OS.posix? == true
       end
       assert OS::Underlying.windows?
-    elsif (RbConfig::CONFIG["host_os"] == 'linux') || RUBY_PLATFORM =~ /linux/
+    elsif [/linux/, /darwin/].any? {|posix_pattern| (RbConfig::CONFIG["host_os"] =~ posix_pattern) || RUBY_PLATFORM =~ posix_pattern }
       assert OS.windows? == false
       assert OS.posix? == true
       assert !OS::Underlying.windows?

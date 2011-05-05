@@ -115,7 +115,7 @@ describe "OS" do
   end
 
   it "should have a jruby method" do
-    if RUBY_DESCRIPTION =~ /^(jruby|java)/
+    if defined?(RUBY_DESCRIPTION) && RUBY_DESCRIPTION =~ /^(jruby|java)/
       assert OS.jruby?
     else
       assert !OS.jruby?

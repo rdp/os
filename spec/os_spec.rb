@@ -1,10 +1,5 @@
 require File.expand_path('spec_helper.rb', File.dirname(__FILE__))
 
-RSpec.configure do |config|
-  # config.run_all_when_everything_filtered = true
-  config.expect_with :stdlib         # => Test::Unit or MiniTest
-end
-
 describe "OS" do
 
   it "identifies whether windows? or posix?" do

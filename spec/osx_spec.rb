@@ -1,7 +1,4 @@
-require 'rubygems' if RUBY_VERSION < '1.9.0'
-
-require File.dirname(__FILE__) + '/../lib/os.rb' # load before sane to avoid sane being able to requir the gemified version...
-require 'rspec' # rspec2
+require File.expand_path('spec_helper.rb', File.dirname(__FILE__))
 
 describe 'For OSX (Snow Leopard, 10.6),' do
   before(:each) do

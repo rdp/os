@@ -3,3 +3,7 @@ require File.expand_path('../lib/os.rb', File.dirname(__FILE__))
 
 require 'rspec' # rspec2
 
+RSpec.configure do |config|
+  config.expect_with :rspec, :stdlib # enable `should` OR `assert`
+end
+

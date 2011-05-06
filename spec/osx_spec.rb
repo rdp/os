@@ -6,7 +6,10 @@ require 'rspec' # rspec2
 describe 'For OSX (Snow Leopard, 10.6),' do
   before(:each) do
     ENV.stub!(:[]).with('OS').and_return(nil)
-    Kernel.stub!(:RUBY_PLATFORM => "x86_64-darwin10.6")
+    # Issues stubbing RUBY_PLATFORM, using RbConfig instead.
+    # Kernel.stub!(:RUBY_PLATFORM => "x86_64-darwin10.6")
+    RbConfig::CONFIG.stub!(:[]).with('host_os').and_return("darwin10.6.0")
+    RbConfig::CONFIG.stub!(:[]).with('host_cpu').and_return('i386')
   end
 
   describe OS do

@@ -185,6 +185,22 @@ class OS
     end
   end
 
+  # provides easy way to see the relevant config entries
+  def self.report
+    relevant_keys = [
+      'arch',
+      'host',
+      'host_cpu',
+      'host_os',
+      'host_vendor',
+      'target',
+      'target_cpu',
+      'target_os',
+      'target_vendor',
+    ]
+    RbConfig::CONFIG.reject {|key, val| !relevant_keys.include? key }.merge({'RUBY_PLATFORM' => RUBY_PLATFORM}).to_yaml
+  end
+
   class << self
     alias :doze? :windows? # a joke name but I use it and like it :P
     alias :jruby? :java?

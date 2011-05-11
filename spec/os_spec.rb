@@ -1,11 +1,8 @@
-require 'rubygems' if RUBY_VERSION < '1.9.0'
-
-require File.dirname(__FILE__) + '/../lib/os.rb' # load before sane to avoid sane being able to requir the gemified version...
-require 'rspec' # rspec2
+require File.expand_path('spec_helper.rb', File.dirname(__FILE__))
 
 describe "OS" do
 
-  it "has a windows? method" do
+  it "identifies whether windows? or posix?" do
     if ENV['OS'] == 'Windows_NT'
       unless RUBY_PLATFORM =~ /cygwin/
         assert OS.windows? == true
@@ -17,7 +14,7 @@ describe "OS" do
         assert OS.posix? == true
       end
       assert OS::Underlying.windows?
-    elsif (RbConfig::CONFIG["host_os"] == 'linux') || RUBY_PLATFORM =~ /linux/
+    elsif [/linux/, /darwin/].any? {|posix_pattern| (RbConfig::CONFIG["host_os"] =~ posix_pattern) || RUBY_PLATFORM =~ posix_pattern }
       assert OS.windows? == false
       assert OS.posix? == true
       assert !OS::Underlying.windows?
@@ -44,7 +41,7 @@ describe "OS" do
     end
 
   end
-  
+
   it "should have an iron_ruby method" do
     if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'ironruby'
       assert OS.iron_ruby? == true
@@ -78,7 +75,7 @@ describe "OS" do
     end
 
   end
-  
+
   it "should have a cygwin? method" do
     if RUBY_PLATFORM =~ /cygwin/
       assert OS.cygwin? == true
@@ -100,7 +97,7 @@ describe "OS" do
     assert bytes > 0 # should always be true
     assert bytes.is_a?(Numeric) # don't want strings from any platform...
   end
-  
+
   it "should tell you what the right /dev/null is" do
     if OS.windows?
       OS.dev_null.should == "NUL"
@@ -108,9 +105,9 @@ describe "OS" do
       OS.dev_null.should == "/dev/null"
     end
   end
-  
+
   it "should have a jruby method" do
-    if RUBY_DESCRIPTION =~ /^(jruby|java)/
+    if defined?(RUBY_DESCRIPTION) && RUBY_DESCRIPTION =~ /^(jruby|java)/
       assert OS.jruby?
     else
       assert !OS.jruby?

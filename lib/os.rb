@@ -42,6 +42,15 @@ class OS
 
   end
 
+  # true for linux, false for windows, os x, cygwin
+  def self.linux?
+    if (RbConfig::CONFIG['host_os'] =~ /linux/)
+      true
+    else
+      false
+    end
+  end
+
   def self.iron_ruby?
    @iron_ruby ||= begin
      if defined?(RUBY_ENGINE) && (RUBY_ENGINE == 'ironruby')
@@ -56,7 +65,7 @@ class OS
     @bits ||= begin
       require 'rbconfig'
       host_cpu = RbConfig::CONFIG['host_cpu']
-      if host_cpu =~ /_64$/ # x86_64
+      if host_cpu =~ /_64$/ || RUBY_PLATFORM =~ /x86_64/
         64
       elsif RUBY_PLATFORM == 'java' && ENV_JAVA['sun.arch.data.model'] # "32" or "64":http://www.ruby-forum.com/topic/202173#880613
         ENV_JAVA['sun.arch.data.model'].to_i
@@ -95,12 +104,16 @@ class OS
 
   def self.mac?
     @mac = begin
-      if RUBY_PLATFORM =~ /darwin/
+      if RbConfig::CONFIG['host_os'] =~ /darwin/
         true
       else
         false
       end
     end      
+  end
+
+  def self.osx?
+    mac?
   end
 
   # amount of memory the current process "is using", in RAM
@@ -138,8 +151,16 @@ class OS
 
   class Underlying
 
+    def self.bsd?
+      OS.osx?
+    end
+
     def self.windows?
       ENV['OS'] == 'Windows_NT'
+    end
+
+    def self.linux?
+      RbConfig::CONFIG['host_os'] =~ /linux/ ? true : false
     end
 
   end

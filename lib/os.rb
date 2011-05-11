@@ -51,7 +51,7 @@ class OS
 
   # true for linux, false for windows, os x, cygwin
   def self.linux?
-    if (config['host_os'] =~ /linux/)
+    if (host_os =~ /linux/)
       true
     else
       false
@@ -70,14 +70,13 @@ class OS
 
   def self.bits
     @bits ||= begin
-      host_cpu = config['host_cpu']
       if host_cpu =~ /_64$/ || RUBY_PLATFORM =~ /x86_64/
         64
       elsif RUBY_PLATFORM == 'java' && ENV_JAVA['sun.arch.data.model'] # "32" or "64":http://www.ruby-forum.com/topic/202173#880613
         ENV_JAVA['sun.arch.data.model'].to_i
       elsif host_cpu == 'i386'
         32
-      elsif config['host_os'] =~ /32$/ # mingw32, mswin32
+      elsif host_os =~ /32$/ # mingw32, mswin32
         32
       else # cygwin only...I think
         if 1.size == 8
@@ -108,7 +107,7 @@ class OS
 
   def self.mac?
     @mac = begin
-      if config['host_os'] =~ /darwin/
+      if host_os =~ /darwin/
         true
       else
         false
@@ -164,7 +163,7 @@ class OS
     end
 
     def self.linux?
-      config['host_os'] =~ /linux/ ? true : false
+      OS.host_os =~ /linux/ ? true : false
     end
 
   end

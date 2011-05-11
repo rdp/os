@@ -132,9 +132,8 @@ describe OS, "provides access to to underlying config values" do
     end
   end
 
-  describe "by providing a delegate method for each key in RbConfig::CONFIG" do
-    # TODO: should we just spot check?  Benefit of not checking everything?
-    RbConfig::CONFIG.keys.each do |config_key|
+  describe "by providing a delegate method for relevant keys in RbConfig::CONFIG" do
+    %w(host host_cpu host_os).sort.each do |config_key|
       it "should delegate '#{config_key}'" do
         expected = "TEST #{config_key}"
         RbConfig::CONFIG.should_receive(:[]).with(config_key).and_return(expected)

@@ -192,21 +192,11 @@ class OS
   class << self
     alias :doze? :windows? # a joke name but I use it and like it :P
     alias :jruby? :java?
+
+    # delegators for relevant config values
+    %w(host host_cpu host_os).each do |method_name|
+      define_method(method_name) { config[method_name] }
+    end
   end
 
-  def self.respond_to?(sym)
-    config_respond_to?(sym) || super(sym)
-  end
-
-  def self.method_missing(sym, *args, &block)
-    return config[sym.to_s] if config_respond_to?(sym)
-    super(sym, *args, &block)
-  end
-
-  private
-
-  def self.config_respond_to?(sym)
-    config.keys.include? sym.to_s
-  end
-  
 end

@@ -1,7 +1,14 @@
+require 'rbconfig'
+
 # a set of friendly files for determining your Ruby runtime
 # treats cygwin as linux
 # also treats IronRuby on mono as...linux
 class OS
+  attr_reader :config
+
+  def self.config
+    @config ||= RbConfig::CONFIG
+  end
 
   # true if on windows [and/or jruby]
   # false if on linux or cygwin on windows
@@ -44,7 +51,7 @@ class OS
 
   # true for linux, false for windows, os x, cygwin
   def self.linux?
-    if (RbConfig::CONFIG['host_os'] =~ /linux/)
+    if (config['host_os'] =~ /linux/)
       true
     else
       false
@@ -63,15 +70,14 @@ class OS
 
   def self.bits
     @bits ||= begin
-      require 'rbconfig'
-      host_cpu = RbConfig::CONFIG['host_cpu']
+      host_cpu = config['host_cpu']
       if host_cpu =~ /_64$/ || RUBY_PLATFORM =~ /x86_64/
         64
       elsif RUBY_PLATFORM == 'java' && ENV_JAVA['sun.arch.data.model'] # "32" or "64":http://www.ruby-forum.com/topic/202173#880613
         ENV_JAVA['sun.arch.data.model'].to_i
       elsif host_cpu == 'i386'
         32
-      elsif RbConfig::CONFIG['host_os'] =~ /32$/ # mingw32, mswin32
+      elsif config['host_os'] =~ /32$/ # mingw32, mswin32
         32
       else # cygwin only...I think
         if 1.size == 8
@@ -96,15 +102,13 @@ class OS
 
   def self.ruby_bin
     @ruby_exe ||= begin
-      require 'rbconfig'
-      config = RbConfig::CONFIG
       File::join(config['bindir'], config['ruby_install_name']) + config['EXEEXT']
     end
   end
 
   def self.mac?
     @mac = begin
-      if RbConfig::CONFIG['host_os'] =~ /darwin/
+      if config['host_os'] =~ /darwin/
         true
       else
         false
@@ -160,7 +164,7 @@ class OS
     end
 
     def self.linux?
-      RbConfig::CONFIG['host_os'] =~ /linux/ ? true : false
+      config['host_os'] =~ /linux/ ? true : false
     end
 
   end
@@ -190,4 +194,19 @@ class OS
     alias :jruby? :java?
   end
 
+  def self.respond_to?(sym)
+    config_respond_to?(sym) || super(sym)
+  end
+
+  def self.method_missing(sym, *args, &block)
+    return config[sym.to_s] if config_respond_to?(sym)
+    super(sym, *args, &block)
+  end
+
+  private
+
+  def self.config_respond_to?(sym)
+    config.keys.include? sym.to_s
+  end
+  
 end

@@ -1,4 +1,5 @@
 require 'rbconfig'
+require 'yaml'
 
 # a set of friendly files for determining your Ruby runtime
 # treats cygwin as linux
@@ -186,6 +187,22 @@ class OS
         "/dev/null"
       end
     end
+  end
+
+  # provides easy way to see the relevant config entries
+  def self.report
+    relevant_keys = [
+      'arch',
+      'host',
+      'host_cpu',
+      'host_os',
+      'host_vendor',
+      'target',
+      'target_cpu',
+      'target_os',
+      'target_vendor',
+    ]
+    RbConfig::CONFIG.reject {|key, val| !relevant_keys.include? key }.merge({'RUBY_PLATFORM' => RUBY_PLATFORM}).to_yaml
   end
 
   class << self

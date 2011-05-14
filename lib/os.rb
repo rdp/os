@@ -1,3 +1,5 @@
+require 'yaml'
+
 # a set of friendly files for determining your Ruby runtime
 # treats cygwin as linux
 # also treats IronRuby on mono as...linux

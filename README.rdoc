@@ -1,6 +1,8 @@
 The OS gem allows for some easy telling if you're on windows or not.
 
+```ruby
 require 'os'
+
 >> OS.windows?
 => true   # also OS.doze?
 
@@ -27,6 +29,21 @@ require 'os'
 
 >> OS.rss_bytes
 => 12300033 # rss bytes this process is using currently, works in Linux/windows
+
+>> puts OS.report
+==> # a yaml report of helpful values
+--- 
+arch: x86_64-darwin10.6.0
+target_os: darwin10.6.0
+target_vendor: apple
+target_cpu: x86_64
+target: x86_64-apple-darwin10.6.0
+host_os: darwin10.6.0
+host_vendor: apple
+host_cpu: i386
+host: i386-apple-darwin10.6.0
+RUBY_PLATFORM: x86_64-darwin10.6.0
+```
 
 If there are any other features you'd like, let me know.
 

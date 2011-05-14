@@ -1,7 +1,14 @@
+require 'rbconfig'
+
 # a set of friendly files for determining your Ruby runtime
 # treats cygwin as linux
 # also treats IronRuby on mono as...linux
 class OS
+  attr_reader :config
+
+  def self.config
+    @config ||= RbConfig::CONFIG
+  end
 
   # true if on windows [and/or jruby]
   # false if on linux or cygwin on windows
@@ -44,7 +51,7 @@ class OS
 
   # true for linux, false for windows, os x, cygwin
   def self.linux?
-    if (RbConfig::CONFIG['host_os'] =~ /linux/)
+    if (host_os =~ /linux/)
       true
     else
       false
@@ -63,15 +70,13 @@ class OS
 
   def self.bits
     @bits ||= begin
-      require 'rbconfig'
-      host_cpu = RbConfig::CONFIG['host_cpu']
       if host_cpu =~ /_64$/ || RUBY_PLATFORM =~ /x86_64/
         64
       elsif RUBY_PLATFORM == 'java' && ENV_JAVA['sun.arch.data.model'] # "32" or "64":http://www.ruby-forum.com/topic/202173#880613
         ENV_JAVA['sun.arch.data.model'].to_i
       elsif host_cpu == 'i386'
         32
-      elsif RbConfig::CONFIG['host_os'] =~ /32$/ # mingw32, mswin32
+      elsif host_os =~ /32$/ # mingw32, mswin32
         32
       else # cygwin only...I think
         if 1.size == 8
@@ -96,15 +101,13 @@ class OS
 
   def self.ruby_bin
     @ruby_exe ||= begin
-      require 'rbconfig'
-      config = RbConfig::CONFIG
       File::join(config['bindir'], config['ruby_install_name']) + config['EXEEXT']
     end
   end
 
   def self.mac?
     @mac = begin
-      if RbConfig::CONFIG['host_os'] =~ /darwin/
+      if host_os =~ /darwin/
         true
       else
         false
@@ -160,7 +163,7 @@ class OS
     end
 
     def self.linux?
-      RbConfig::CONFIG['host_os'] =~ /linux/ ? true : false
+      OS.host_os =~ /linux/ ? true : false
     end
 
   end
@@ -188,6 +191,11 @@ class OS
   class << self
     alias :doze? :windows? # a joke name but I use it and like it :P
     alias :jruby? :java?
+
+    # delegators for relevant config values
+    %w(host host_cpu host_os).each do |method_name|
+      define_method(method_name) { config[method_name] }
+    end
   end
 
 end

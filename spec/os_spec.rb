@@ -115,3 +115,31 @@ describe "OS" do
   end
 
 end
+
+describe OS, "provides access to to underlying config values" do
+
+  describe "#config, supplys the CONFIG hash" do
+    subject { OS.config }
+
+    specify { subject.should be_a(Hash) }
+
+    it "should supply 'host_cpu'" do
+      subject['host_cpu'].should eq(RbConfig::CONFIG['host_cpu'])
+    end
+
+    it "should supply 'host_os'" do
+      subject['host_os'].should eq(RbConfig::CONFIG['host_os'])
+    end
+  end
+
+  describe "by providing a delegate method for relevant keys in RbConfig::CONFIG" do
+    %w(host host_cpu host_os).sort.each do |config_key|
+      it "should delegate '#{config_key}'" do
+        expected = "TEST #{config_key}"
+        RbConfig::CONFIG.should_receive(:[]).with(config_key).and_return(expected)
+
+        OS.send(config_key).should == expected
+      end
+    end
+  end
+end

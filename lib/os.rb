@@ -217,7 +217,11 @@ class OS
       when /freebsd/
         `sysctl -n hw.ncpu`.to_i
       else
-        raise 'unknown platform processor_count'
+        if RbConfig::CONFIG['host_os'] =~ /darwin/
+           (hwprefs_available? ? `hwprefs thread_count` : `sysctl -n hw.ncpu`).to_i
+        else
+          raise 'unknown platform processor_count'
+        end
       end
   end
 

@@ -88,7 +88,11 @@ describe "OS" do
     if RUBY_PLATFORM =~ /darwin/
       assert OS.mac? == true
     else
-      assert OS.mac? == false
+      if OS.host_os == 'darwin'
+        assert OS.mac? == true
+      else
+        assert OS.mac? == false
+      end
     end
   end
 

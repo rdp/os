@@ -27,7 +27,7 @@ The OS gem allows for some easy telling if you're on windows or not.
     => "NUL" # or "/dev/null" depending on which platform
     
     >> OS.rss_bytes
-    => 12300033 # rss bytes this process is using currently, works in Linux/windows
+    => 12300033 # rss bytes this process is using currently.  Basically "total in memory footprint" (doesn't include RAM in swap)
     
     >> puts OS.report
     ==> # a yaml report of helpful values
@@ -43,6 +43,8 @@ The OS gem allows for some easy telling if you're on windows or not.
     host: i386-apple-darwin10.6.0
     RUBY_PLATFORM: x86_64-darwin10.6.0
 
+   >> OS.cpu_count
+   => 2
 If there are any other features you'd like, let me know.
 
 github.com/rdp/os for feedback et al

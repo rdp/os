@@ -205,6 +205,22 @@ class OS
     RbConfig::CONFIG.reject {|key, val| !relevant_keys.include? key }.merge({'RUBY_PLATFORM' => RUBY_PLATFORM}).to_yaml
   end
 
+  def self.cpu_count
+    @cpu_count ||=
+    case RUBY_PLATFORM
+      when /darwin9/
+        `hwprefs cpu_count`.to_i
+      when /darwin10/
+        (hwprefs_available? ? `hwprefs thread_count` : `sysctl -n hw.ncpu`).to_i
+      when /linux/
+        `cat /proc/cpuinfo | grep processor | wc -l`.to_i
+      when /freebsd/
+        `sysctl -n hw.ncpu`.to_i
+      else
+        raise 'unknown platform processor_count'
+      end
+  end
+
   class << self
     alias :doze? :windows? # a joke name but I use it and like it :P
     alias :jruby? :java?
@@ -213,6 +229,12 @@ class OS
     %w(host host_cpu host_os).each do |method_name|
       define_method(method_name) { config[method_name] }
     end
+  end
+
+  private
+
+  def self.hwprefs_available?
+    `which hwprefs` != ''
   end
 
 end

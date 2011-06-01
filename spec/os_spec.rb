@@ -114,6 +114,13 @@ describe "OS" do
     end
   end
 
+  it "has working cpu count method" do
+    assert OS.cpu_count >= 1
+    if OS.mac?
+      assert OS.cpu_count == 2 # my own developer box :P
+    end
+  end
+
 end
 
 describe OS, "provides access to to underlying config values" do

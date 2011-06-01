@@ -7,7 +7,7 @@ describe "OS" do
       unless RUBY_PLATFORM =~ /cygwin/
         assert OS.windows? == true
         assert OS.doze? == true
-        assert OS.posix? == false
+        assert OS.posix? == false # can fail in error at times...I guess because some other spec has reset ENV on us...
       else
         assert OS::Underlying.windows?
         assert OS.windows? == false
@@ -122,6 +122,14 @@ describe "OS" do
     assert OS.cpu_count >= 1
     if OS.mac?
       assert OS.cpu_count == 2 # my own developer box :P
+    end
+  end
+  
+  it "has working cpu count method with no env. variable" do
+    OS.instance_variable_set(:@cpu_count, nil) # reset it
+    if OS.windows?
+      ENV.delete('NUMBER_OF_PROCESSORS')
+      assert OS.cpu_count >= 1
     end
   end
 

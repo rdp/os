@@ -143,7 +143,10 @@ class OS
         processes = wmi.ExecQuery("select * from win32_process where ProcessId = #{Process.pid}")
         memory_used = nil
         # only allow for one...
-        for process in processes; raise if memory_used; memory_used = process.WorkingSetSize.to_i; end
+        for process in processes
+          raise if memory_used
+          memory_used = process.WorkingSetSize.to_i
+          end
         memory_used
       end
     elsif OS.posix? # linux [though I've heard it works in OS X]
@@ -219,6 +222,16 @@ class OS
       else
         if RbConfig::CONFIG['host_os'] =~ /darwin/
            (hwprefs_available? ? `hwprefs thread_count` : `sysctl -n hw.ncpu`).to_i
+        elsif self.windows?
+          out = ENV['NUMBER_OF_PROCESSORS'].to_i
+          if out == 0
+             # in case env. variable not set
+            require 'win32ole'
+            wmi = WIN32OLE.connect("winmgmts://")
+            cpu = wmi.ExecQuery("select NumberOfCores from Win32_Processor") # don't count hyper-threaded in this
+            out = cpu.to_enum.first.NumberOfCores
+          end
+          out
         else
           raise 'unknown platform processor_count'
         end
@@ -233,6 +246,7 @@ class OS
     %w(host host_cpu host_os).each do |method_name|
       define_method(method_name) { config[method_name] }
     end
+    
   end
 
   private

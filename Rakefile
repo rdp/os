@@ -1,6 +1,8 @@
 require 'rubygems' if RUBY_VERSION < '1.9.0'
 require 'rake'
 
+# Don't forget to run rake gemspec with each release!
+
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|

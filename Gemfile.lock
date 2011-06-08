@@ -1,7 +1,5 @@
 PATH
   remote: .
-  specs:
-    os (0.7.4)
 
 GEM
   remote: http://rubygems.org/
@@ -28,5 +26,4 @@ PLATFORMS
 
 DEPENDENCIES
   jeweler
-  os!
   rspec (>= 2.0)

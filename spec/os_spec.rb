@@ -132,6 +132,16 @@ describe "OS" do
       assert OS.cpu_count >= 1
     end
   end
+  
+  it "should have a start/open command helper" do
+    if OS.doze?
+      assert OS.open_file_command == "start"
+    elsif OS.mac?
+      assert OS.open_file_command == "open"
+    else
+      assert OS.open_file_command == "xdg-open"
+    end
+  end
 
 end
 

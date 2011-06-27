@@ -43,6 +43,9 @@ The OS gem allows for some easy telling if you're on windows or not.
    >> OS.cpu_count  
    => 2 # number of cores
   
+  >> OS.open_file_command
+  => "start" # or open on mac, or xdg-open on linux (all designed to open a file)
+  
 If there are any other features you'd like, let me know, I'll do what I can to add them :)
 
 http://github.com/rdp/os for feedback et al

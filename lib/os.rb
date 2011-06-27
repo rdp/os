@@ -237,6 +237,18 @@ class OS
         end
       end
   end
+  
+  def self.open_file_command
+    if OS.doze? || OS.cygwin?
+      "start"
+    elsif OS.mac?
+      "open"
+    else
+      # linux...what about cygwin?
+      "xdg-open"
+    end
+
+  end
 
   class << self
     alias :doze? :windows? # a joke name but I use it and like it :P

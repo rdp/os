@@ -15,7 +15,7 @@ The OS gem allows for some easy telling if you're on windows or not.
     => "c:\ruby18\bin\ruby.exe" # or "/usr/local/bin/ruby" or what not
     
     >> OS.posix?
-    => false
+    => false # true for linux, os x, cygwin
     
     >> OS.mac? # or OS.osx? or OS.x?
     => false
@@ -41,10 +41,16 @@ The OS gem allows for some easy telling if you're on windows or not.
     RUBY_PLATFORM: x86_64-darwin10.6.0
 
    >> OS.cpu_count  
-   => 2 # number of cores
+   => 2 # number of cores, doesn't include hyper-threaded cores.
   
   >> OS.open_file_command
   => "start" # or open on mac, or xdg-open on linux (all designed to open a file)
+  
+  >> OS::Underlying.windows?
+  => true # true for cygwin or MRI, whereas OS.windows? is false for cygwin
+  
+  >> OS::Underlying.bsd?
+  => true # true for OS X
   
 If there are any other features you'd like, let me know, I'll do what I can to add them :)
 

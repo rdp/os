@@ -13,6 +13,7 @@ describe 'For OSX (Snow Leopard, 10.6),' do
     subject { OS } # class, not instance
 
     it { should be_mac }
+    it { should be_x } # OS.x?
     it { should be_osx }
     it { should be_posix }
 

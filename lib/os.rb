@@ -228,15 +228,12 @@ class OS
         if RbConfig::CONFIG['host_os'] =~ /darwin/
            (hwprefs_available? ? `hwprefs thread_count` : `sysctl -n hw.ncpu`).to_i
         elsif self.windows?
-          out = ENV['NUMBER_OF_PROCESSORS'].to_i
-          if out == 0
-             # in case env. variable not set
-            require 'win32ole'
-            wmi = WIN32OLE.connect("winmgmts://")
-            cpu = wmi.ExecQuery("select NumberOfCores from Win32_Processor") # don't count hyper-threaded in this
-            out = cpu.to_enum.first.NumberOfCores
-          end
-          out
+          # counts hyper threaded...not good.
+		  # out = ENV['NUMBER_OF_PROCESSORS'].to_i
+          require 'win32ole'
+          wmi = WIN32OLE.connect("winmgmts://")
+          cpu = wmi.ExecQuery("select NumberOfCores from Win32_Processor") # don't count hyper-threaded in this
+          cpu.to_enum.first.NumberOfCores
         else
           raise 'unknown platform processor_count'
         end

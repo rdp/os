@@ -61,6 +61,7 @@ Related projects:
 rubygems:
   Gem::Platform.local
   Gem.ruby
+  The reason Gem::Platform.local felt wrong to me is that it treated cygwin as windows--which for most build environments, is wrong.  Hence the creation of this gem.
 
 the facets gem (has a class similar to rubygems, above)
   require 'facets/platform'
@@ -68,6 +69,7 @@ the facets gem (has a class similar to rubygems, above)
 
 the "platform" gem, itself (a different gem)
 
-The reason Gem::Platform.local felt wrong to me is that it treated cygwin as windows--which for most build environments, is wrong.  Hence the creation of this.
+FFI::Platform::OS
+  http://rubydoc.info/github/ffi/ffi/master/FFI/Platform
 
 License: MIT (see LICENSE file)

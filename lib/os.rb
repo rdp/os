@@ -187,7 +187,7 @@ class OS
     end
   end
   
-   def self.dev_null
+   def self.dev_null # File::NULL in 1.9.3+
     @dev_null ||= begin
       if OS.windows?
         "NUL"

@@ -124,7 +124,7 @@ describe "OS" do
       assert OS.cpu_count == 2 # my own developer box :P
     end
   end
-  
+
   it "has working cpu count method with no env. variable" do
     OS.instance_variable_set(:@cpu_count, nil) # reset it
     if OS.windows?
@@ -132,7 +132,7 @@ describe "OS" do
       assert OS.cpu_count >= 1
     end
   end
-  
+
   it "should have a start/open command helper" do
     if OS.doze?
       assert OS.open_file_command == "start"
@@ -140,6 +140,14 @@ describe "OS" do
       assert OS.open_file_command == "open"
     else
       assert OS.open_file_command == "xdg-open"
+    end
+  end
+
+  it "should have a freebsd? method" do
+    if OS.host_os =~ /freebsd/
+      assert OS.freebsd? == true
+    else
+      assert OS.freebsd? == false
     end
   end
 

@@ -13,7 +13,7 @@ class OS
 
   # true if on windows [and/or jruby]
   # false if on linux or cygwin on windows
-  
+
   def self.windows?
     @windows ||= begin
       if RUBY_PLATFORM =~ /cygwin/ # i386-cygwin
@@ -53,6 +53,14 @@ class OS
   # true for linux, false for windows, os x, cygwin
   def self.linux?
     if (host_os =~ /linux/)
+      true
+    else
+      false
+    end
+  end
+
+  def self.freebsd?
+    if (host_os =~ /freebsd/)
       true
     else
       false
@@ -113,7 +121,7 @@ class OS
       else
         false
       end
-    end      
+    end
   end
 
   def self.osx?
@@ -144,7 +152,7 @@ class OS
           wmi = WIN32OLE.connect("winmgmts://")
         rescue LoadError, NoMethodError => e # NoMethod for IronRuby currently [sigh]
           raise 'rss unknown for this platform ' + e.to_s
-        end        
+        end
         processes = wmi.ExecQuery("select * from win32_process where ProcessId = #{Process.pid}")
         memory_used = nil
         # only allow for one...
@@ -176,7 +184,7 @@ class OS
     end
 
   end
-  
+
   def self.cygwin?
     @cygwin = begin
       if RUBY_PLATFORM =~ /-cygwin/
@@ -186,7 +194,7 @@ class OS
       end
     end
   end
-  
+
    def self.dev_null # File::NULL in 1.9.3+
     @dev_null ||= begin
       if OS.windows?
@@ -239,7 +247,7 @@ class OS
         end
       end
   end
-  
+
   def self.open_file_command
     if OS.doze? || OS.cygwin?
       "start"
@@ -260,7 +268,7 @@ class OS
     %w(host host_cpu host_os).each do |method_name|
       define_method(method_name) { config[method_name] }
     end
-    
+
   end
 
   private

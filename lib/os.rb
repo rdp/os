@@ -159,7 +159,7 @@ class OS
         for process in processes
           raise if memory_used
           memory_used = process.WorkingSetSize.to_i
-          end
+        end
         memory_used
       end
     elsif OS.posix? # linux [though I've heard it works in OS X]
@@ -195,7 +195,7 @@ class OS
     end
   end
 
-   def self.dev_null # File::NULL in 1.9.3+
+  def self.dev_null # File::NULL in 1.9.3+
     @dev_null ||= begin
       if OS.windows?
         "NUL"
@@ -224,28 +224,28 @@ class OS
   def self.cpu_count
     @cpu_count ||=
     case RUBY_PLATFORM
-      when /darwin9/
-        `hwprefs cpu_count`.to_i
-      when /darwin10/
-        (hwprefs_available? ? `hwprefs thread_count` : `sysctl -n hw.ncpu`).to_i
-      when /linux/
-        `cat /proc/cpuinfo | grep processor | wc -l`.to_i
-      when /freebsd/
-        `sysctl -n hw.ncpu`.to_i
+    when /darwin9/
+      `hwprefs cpu_count`.to_i
+    when /darwin10/
+      (hwprefs_available? ? `hwprefs thread_count` : `sysctl -n hw.ncpu`).to_i
+    when /linux/
+      `cat /proc/cpuinfo | grep processor | wc -l`.to_i
+    when /freebsd/
+      `sysctl -n hw.ncpu`.to_i
+    else
+      if RbConfig::CONFIG['host_os'] =~ /darwin/
+         (hwprefs_available? ? `hwprefs thread_count` : `sysctl -n hw.ncpu`).to_i
+      elsif self.windows?
+        # ENV counts hyper threaded...not good.
+      	      # out = ENV['NUMBER_OF_PROCESSORS'].to_i
+        require 'win32ole'
+        wmi = WIN32OLE.connect("winmgmts://")
+        cpu = wmi.ExecQuery("select NumberOfCores from Win32_Processor") # don't count hyper-threaded in this
+        cpu.to_enum.first.NumberOfCores
       else
-        if RbConfig::CONFIG['host_os'] =~ /darwin/
-           (hwprefs_available? ? `hwprefs thread_count` : `sysctl -n hw.ncpu`).to_i
-        elsif self.windows?
-          # ENV counts hyper threaded...not good.
-		      # out = ENV['NUMBER_OF_PROCESSORS'].to_i
-          require 'win32ole'
-          wmi = WIN32OLE.connect("winmgmts://")
-          cpu = wmi.ExecQuery("select NumberOfCores from Win32_Processor") # don't count hyper-threaded in this
-          cpu.to_enum.first.NumberOfCores
-        else
-          raise 'unknown platform processor_count'
-        end
+        raise 'unknown platform processor_count'
       end
+    end
   end
 
   def self.open_file_command

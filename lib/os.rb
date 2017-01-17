@@ -163,7 +163,7 @@ class OS
         memory_used
       end
     elsif OS.posix? # linux [though I've heard it works in OS X]
-      kb = `ps -o rss= -p #{Process.pid}`.to_i # in kilobytes
+      `ps -o rss= -p #{Process.pid}`.to_i # in kilobytes
     else
       raise 'unknown rss for this platform'
     end

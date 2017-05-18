@@ -119,10 +119,9 @@ describe "OS" do
   end
 
   it "has working cpu count method" do
-    assert OS.cpu_count >= 1
-    if OS.mac?
-      assert OS.cpu_count == 2 # my own developer box :P
-    end
+    cpu_count = OS.cpu_count
+    assert cpu_count >= 1
+    assert (cpu_count & (cpu_count - 1)) == 0 # CPU count is normally a power of 2
   end
 
   it "has working cpu count method with no env. variable" do

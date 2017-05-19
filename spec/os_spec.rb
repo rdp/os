@@ -142,6 +142,23 @@ describe "OS" do
     end
   end
 
+  it "should provide a path to directory for application config" do
+    ENV.stub(:[])
+
+    if OS.mac?
+      ENV.stub(:[]).with('HOME').and_return('/home/user')
+      assert OS.app_config_path('appname') == '/home/xdg/Library/Application Support/appname'
+    elsif OS.doze?
+      # TODO
+    else
+      ENV.stub(:[]).with('HOME').and_return('/home/user')
+      assert OS.app_config_path('appname') == '/home/user/.config/appname'
+
+      ENV.stub(:[]).with('XDG_CONFIG_HOME').and_return('/home/xdg/.config')
+      assert OS.app_config_path('appname') == '/home/xdg/.config/appname'
+    end
+  end
+
   it "should have a freebsd? method" do
     if OS.host_os =~ /freebsd/
       assert OS.freebsd? == true

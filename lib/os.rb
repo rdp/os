@@ -260,6 +260,24 @@ class OS
 
   end
 
+  def self.app_config_path(name)
+    if OS.doze?
+      if ENV['LOCALAPPDATA']
+        return File.join(ENV['LOCALAPPDATA'], name)
+      end
+
+      File.join ENV['USERPROFILE'], 'Local Settings', 'Application Data', name
+    elsif OS.mac?
+      File.join ENV['HOME'], 'Library', 'Application Support', name
+    else
+      if ENV['XDG_CONFIG_HOME']
+        return File.join(ENV['XDG_CONFIG_HOME'], name)
+      end
+
+      File.join ENV['HOME'], '.config', name
+    end
+  end
+
   class << self
     alias :doze? :windows? # a joke name but I use it and like it :P
     alias :jruby? :java?

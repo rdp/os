@@ -11,6 +11,7 @@ begin
     gem.email = "rogerpack2005@gmail.com"
     gem.homepage = "http://github.com/rdp/os"
     gem.authors = ["rdp", "David McCullars"]
+    gem.license = "MIT"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
     # gem.add_development_dependency "fast_require"
     gem.add_development_dependency "rspec", ">= 2.0"

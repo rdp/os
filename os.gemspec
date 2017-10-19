@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0".freeze) if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib".freeze]
   s.authors = ["rdp".freeze, "David McCullars".freeze]
-  s.date = "2017-02-20"
+  s.date = "2017-10-18"
   s.description = "The OS gem allows for some useful and easy functions, like OS.windows? (=> true or false) OS.bits ( => 32 or 64) etc\"".freeze
   s.email = "rogerpack2005@gmail.com".freeze
   s.extra_rdoc_files = [
@@ -38,6 +38,7 @@ Gem::Specification.new do |s|
     "spec/spec_helper.rb"
   ]
   s.homepage = "http://github.com/rdp/os".freeze
+  s.licenses = ["MIT".freeze]
   s.rubygems_version = "2.5.2".freeze
   s.summary = "Simple and easy way to know if you're on windows or not (reliably), as well as how many bits the OS is, etc.".freeze
 

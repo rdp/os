@@ -52,6 +52,9 @@ The OS gem allows for some easy telling if you're on windows or not.
   >> OS::Underlying.bsd?
   => true # true for OS X
   
+  >> OS::Underlying.docker?
+  => false # true if running inside a Docker container
+  
 If there are any other features you'd like, let me know, I'll do what I can to add them :)
 
 http://github.com/rdp/os for feedback et al

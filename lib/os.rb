@@ -183,6 +183,10 @@ class OS
       OS.host_os =~ /linux/ ? true : false
     end
 
+    def self.docker?
+      system('grep -q docker /proc/self/cgroup') if OS.linux?
+    end
+
   end
 
   def self.cygwin?

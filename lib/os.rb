@@ -282,6 +282,20 @@ class OS
     end
   end
 
+  def self.parse_os_release
+    if OS.linux? && File.exist?('/etc/os-release')
+      output = {}
+
+      File.read('/etc/os-release').each_line do |line|
+        parsed_line = line.chomp.tr('"', '').split('=')
+        output[parsed_line[0].to_sym] = parsed_line[1]
+      end
+      output
+    else
+      raise "File /etc/os-release doesn't exists or not Linux"
+    end
+  end
+
   class << self
     alias :doze? :windows? # a joke name but I use it and like it :P
     alias :jruby? :java?

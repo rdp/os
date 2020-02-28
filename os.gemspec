@@ -42,7 +42,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = "2.5.2".freeze
   s.summary = "Simple and easy way to know if you're on windows or not (reliably), as well as how many bits the OS is, etc.".freeze
 
-  s.add_development_dependency('rake', '~> 0.8')
+  s.add_development_dependency('rake', '~> 12.3')
   s.add_development_dependency('rspec', '~> 2.5.0')
   s.add_development_dependency('test-unit', '~> 3')
 end

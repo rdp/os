@@ -16,8 +16,8 @@ begin
     # gem.add_development_dependency "fast_require"
     gem.add_development_dependency "rspec", ">= 2.0"
   end
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
+rescue LoadError => e
+  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler #{e}"
 end
 
 require 'rspec/core/rake_task'

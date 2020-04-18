@@ -288,6 +288,7 @@ class OS
 
       File.read('/etc/os-release').each_line do |line|
         parsed_line = line.chomp.tr('"', '').split('=')
+        next if parsed_line.empty?
         output[parsed_line[0].to_sym] = parsed_line[1]
       end
       output

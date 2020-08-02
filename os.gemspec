@@ -6,7 +6,7 @@
 
 Gem::Specification.new do |s|
   s.name = "os".freeze
-  s.version = "1.1.0"
+  s.version = "1.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0".freeze) if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib".freeze]
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = [
     "ChangeLog",
     "LICENSE",
-    "README.rdoc"
+    "README.md"
   ]
   s.files = [
     ".autotest",
@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
     "Gemfile",
     "Gemfile.lock",
     "LICENSE",
-    "README.rdoc",
+    "README.md",
     "Rakefile",
     "VERSION",
     "autotest/discover.rb",

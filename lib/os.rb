@@ -203,7 +203,7 @@ class OS
       if OS.windows?
         "NUL"
       else
-        "/dev/null"
+        File::NULL
       end
     end
   end

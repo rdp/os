@@ -68,11 +68,7 @@ class OS
 
   def self.iron_ruby?
    @iron_ruby ||= begin
-     if defined?(RUBY_ENGINE) && (RUBY_ENGINE == 'ironruby')
-       true
-     else
-       false
-     end
+     defined?(RUBY_ENGINE) && (RUBY_ENGINE == 'ironruby')
    end
   end
 
@@ -130,7 +126,6 @@ class OS
   def self.x?
     mac?
   end
-
 
   # amount of memory the current process "is using", in RAM
   # (doesn't include any swap memory that it may be using, just that in actual RAM)
@@ -236,7 +231,10 @@ class OS
     when /freebsd/
       `sysctl -n hw.ncpu`.to_i
     else
-      if RbConfig::CONFIG['host_os'] =~ /darwin/
+      if File.readable?('/proc/cpuinfo')
+        # JRuby workaround ; should also work on the Android if cpuinfo is available to user
+        IO.readlines('/proc/cpuinfo').count { |x| x[/^processor/] }
+      elsif RbConfig::CONFIG['host_os'] =~ /darwin/
          (hwprefs_available? ? `hwprefs thread_count` : `sysctl -n hw.ncpu`).to_i
       elsif self.windows?
         # ENV counts hyper threaded...not good.
@@ -246,7 +244,12 @@ class OS
         cpu = wmi.ExecQuery("select NumberOfCores from Win32_Processor") # don't count hyper-threaded in this
         cpu.to_enum.first.NumberOfCores
       else
-        raise 'unknown platform processor_count'
+        begin
+          require 'etc'
+          Etc.nprocessors
+        rescue Exception
+          raise 'unknown platform processor_count'
+        end
       end
     end
   end

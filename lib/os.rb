@@ -283,18 +283,11 @@ class OS
   end
 
   def self.parse_os_release
-    if OS.linux? && File.exist?('/etc/os-release')
-      output = {}
+    parse_release('/etc/os-release')
+  end
 
-      File.read('/etc/os-release').each_line do |line|
-        parsed_line = line.chomp.tr('"', '').split('=')
-        next if parsed_line.empty?
-        output[parsed_line[0].to_sym] = parsed_line[1]
-      end
-      output
-    else
-      raise "File /etc/os-release doesn't exists or not Linux"
-    end
+  def self.parse_lsb_release
+    parse_release('/etc/lsb-release')
   end
 
   class << self
@@ -313,5 +306,17 @@ class OS
   def self.hwprefs_available?
     `which hwprefs` != ''
   end
+
+  def self.parse_release(file)
+    if OS.linux? && File.readable?(file)
+      File.readlines(file).reduce({}) do |output, line|
+        parsed_line = line.strip.delete(?").split('=')
+        next if parsed_line.empty?
+        output.merge(parsed_line[0].to_sym => parsed_line[1])
+      end
+    else
+      raise "File #{file} doesn't exist or not Linux"
+    end
+end
 
 end

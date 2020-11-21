@@ -318,8 +318,7 @@ class OS
     if OS.linux? && File.readable?(file)
       File.readlines(file).reduce({}) do |output, line|
         parsed_line = line.strip.delete(?").split('=')
-        next if parsed_line.empty?
-        output.merge(parsed_line[0].to_sym => parsed_line[1])
+        parsed_line.empty? ? output : output.merge(parsed_line[0].to_sym => parsed_line[1])
       end
     else
       raise "File #{file} doesn't exist or not Linux"

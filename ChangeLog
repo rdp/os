@@ -1,3 +1,12 @@
+1.1.1
+  fix skip blank lines in OS#parse_os_release
+
+1.1.0
+  Add app_config_path method
+  Cleans up dev dependency specs
+  Detect underlying Docker containers method
+  Add Linux-specific OS#parse_os_release method
+
 1.0.1
   add within docker method
 

@@ -176,11 +176,12 @@ class OS
     end
 
     def self.windows?
-      ENV['OS'] == 'Windows_NT'
+      # Windows 10 WSL kernel versions are custom to Microsoft
+      ENV['OS'] == 'Windows_NT' || !(`uname -r` =~ /Microsoft/).nil?
     end
 
     def self.linux?
-      OS.host_os =~ /linux/ ? true : false
+      !windows? && OS.host_os =~ /linux/ ? true : false
     end
 
     def self.docker?

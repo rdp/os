@@ -1,8 +1,8 @@
 require 'rubygems' if RUBY_VERSION < '1.9.0'
 
 # HOW TO DEPLOY
-# Don't forget to run rake gemspec with each release! ... I think...
-# then manually edit os.gemspec remove duplicatee rspecs, circular dependency? HUH?
+# Don't forget to run rake gemspec with each release [after modify VERSION]! ... I think...
+# then manually edit os.gemspec remove duplicatee rspecs, circular dependency on os? HUH?
 # # then  gem build os.gemspec
 # rake build doesn't work???
 # sooo...

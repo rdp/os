@@ -1,12 +1,14 @@
 require 'rubygems' if RUBY_VERSION < '1.9.0'
 
 # HOW TO DEPLOY
-# Don't forget to run rake gemspec with each release [after modify VERSION]! ... I think...
+# bump VERSION file manually
+# rake release
+# Don't forget to run rake gemspec with each release! ... I think...or rake release might be same thing
 # then manually edit os.gemspec remove duplicatee rspecs, circular dependency on os? HUH?
 # # then  gem build os.gemspec
 # rake build doesn't work???
 # sooo...
-# basically these days just adjust this file, and VERSION, push it...gem push os-1.1.2.gem
+# ...gem push os-1.1.2.gem
 
 begin
   require 'jeweler'
@@ -20,7 +22,7 @@ begin
     gem.license = "MIT"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
     # gem.add_development_dependency "fast_require"
-    gem.add_development_dependency "rspec", ">= 2.0"
+    # gem.add_development_dependency "rspec", ">= 2.0"
   end
 rescue LoadError => e
   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler #{e}"

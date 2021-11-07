@@ -155,15 +155,15 @@ class OS
         end
         processes = wmi.ExecQuery("select * from win32_process where ProcessId = #{Process.pid}")
         memory_used = nil
-        # only allow for one...
+        # only allow for one process...
         for process in processes
-          raise if memory_used
+          raise "multiple processes same pid?" if memory_used
           memory_used = process.WorkingSetSize.to_i
         end
         memory_used
       end
     elsif OS.posix? # linux [though I've heard it works in OS X]
-      `ps -o rss= -p #{Process.pid}`.to_i # in kilobytes
+      `ps -o rss= -p #{Process.pid}`.to_i * 1024 # in kiloBytes
     else
       raise 'unknown rss for this platform'
     end

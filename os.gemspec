@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
     "spec/osx_spec.rb",
     "spec/spec_helper.rb"
   ]
-  s.homepage = "http://github.com/rdp/os".freeze
+  s.homepage = "https://github.com/rdp/os".freeze
   s.licenses = ["MIT".freeze]
   s.rubygems_version = "2.7.6".freeze
   s.summary = "Simple and easy way to know if you're on windows or not (reliably), as well as how many bits the OS is, etc.".freeze

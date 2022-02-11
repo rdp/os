@@ -27,6 +27,9 @@ require 'os'
 >> OS.rss_bytes
 => 12300033 # number of rss bytes this process is using currently.  Basically "total in memory footprint" (doesn't include RAM used by the process that's in swap/page file)
 
+>> OS.host_cpu
+=> "x86_64"
+
 >> puts OS.report
 ==> # a yaml report of helpful values
 --- 

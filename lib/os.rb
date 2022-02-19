@@ -47,7 +47,6 @@ class OS
         true
       end
     end
-
   end
 
   # true for linux, false for windows, os x, cygwin
@@ -69,11 +68,7 @@ class OS
 
   def self.iron_ruby?
    @iron_ruby ||= begin
-     if defined?(RUBY_ENGINE) && (RUBY_ENGINE == 'ironruby')
-       true
-     else
-       false
-     end
+     defined?(RUBY_ENGINE) && (RUBY_ENGINE == 'ironruby')
    end
   end
 
@@ -131,7 +126,6 @@ class OS
   def self.x?
     mac?
   end
-
 
   # amount of memory the current process "is using", in RAM
   # (doesn't include any swap memory that it may be using, just that in actual RAM)
@@ -204,7 +198,7 @@ class OS
       if OS.windows?
         "NUL"
       else
-        "/dev/null"
+        File::NULL
       end
     end
   end
@@ -233,23 +227,37 @@ class OS
     when /darwin10/
       (hwprefs_available? ? `hwprefs thread_count` : `sysctl -n hw.ncpu`).to_i
     when /linux/
-      `cat /proc/cpuinfo | grep processor | wc -l`.to_i
+      IO.readlines('/proc/cpuinfo').count { |x| x[/^processor/] }
     when /freebsd/
       `sysctl -n hw.ncpu`.to_i
     else
-      if RbConfig::CONFIG['host_os'] =~ /darwin/
+      if File.readable?('/proc/cpuinfo')
+        # JRuby workaround ; should also work on the Android if cpuinfo is available to user
+        IO.readlines('/proc/cpuinfo').count { |x| x[/^processor/] }
+      elsif RbConfig::CONFIG['host_os'] =~ /darwin/
          (hwprefs_available? ? `hwprefs thread_count` : `sysctl -n hw.ncpu`).to_i
       elsif self.windows?
         # ENV counts hyper threaded...not good.
-      	      # out = ENV['NUMBER_OF_PROCESSORS'].to_i
+              # out = ENV['NUMBER_OF_PROCESSORS'].to_i
         require 'win32ole'
         wmi = WIN32OLE.connect("winmgmts://")
         cpu = wmi.ExecQuery("select NumberOfCores from Win32_Processor") # don't count hyper-threaded in this
         cpu.to_enum.first.NumberOfCores
       else
-        raise 'unknown platform processor_count'
+        begin
+          require 'etc'
+          Etc.nprocessors
+        rescue Exception
+          raise 'unknown platform processor_count'
+        end
       end
     end
+  end
+
+  def self.ipv4_private
+    require 'socket'
+    ip = Socket.ip_address_list.detect(&:ipv4_private?)
+    ip ? ip.ip? ? ip.ip_unpack[0] : '' : ''
   end
 
   def self.open_file_command
@@ -283,18 +291,11 @@ class OS
   end
 
   def self.parse_os_release
-    if OS.linux? && File.exist?('/etc/os-release')
-      output = {}
+    parse_release('/etc/os-release')
+  end
 
-      File.read('/etc/os-release').each_line do |line|
-        parsed_line = line.chomp.tr('"', '').split('=')
-        next if parsed_line.empty?
-        output[parsed_line[0].to_sym] = parsed_line[1]
-      end
-      output
-    else
-      raise "File /etc/os-release doesn't exists or not Linux"
-    end
+  def self.parse_lsb_release
+    parse_release('/etc/lsb-release')
   end
 
   class << self
@@ -314,4 +315,14 @@ class OS
     `which hwprefs` != ''
   end
 
+  def self.parse_release(file)
+    if OS.linux? && File.readable?(file)
+      File.readlines(file).reduce({}) do |output, line|
+        parsed_line = line.strip.delete(?").split('=')
+        parsed_line.empty? ? output : output.merge(parsed_line[0].to_sym => parsed_line[1])
+      end
+    else
+      raise "File #{file} doesn't exist or not Linux"
+    end
+  end
 end

@@ -1,4 +1,4 @@
-The OS gem allows for some easy telling if you're on windows or not. 
+The OS gem allows for some easy telling if you're on windows or not.
 
 ```ruby
 require 'os'
@@ -24,6 +24,9 @@ require 'os'
 >> OS.dev_null
 => "NUL" # or "/dev/null" depending on which platform
 
+>> OS.ipv4_private
+=> "192.168.0.106"
+
 >> OS.rss_bytes
 => 12300033 # number of rss bytes this process is using currently.  Basically "total in memory footprint" (doesn't include RAM used by the process that's in swap/page file)
 
@@ -32,7 +35,7 @@ require 'os'
 
 >> puts OS.report
 ==> # a yaml report of helpful values
---- 
+---
 arch: x86_64-darwin10.6.0
 target_os: darwin10.6.0
 target_vendor: apple
@@ -44,7 +47,7 @@ host_cpu: i386
 host: i386-apple-darwin10.6.0
 RUBY_PLATFORM: x86_64-darwin10.6.0
 
->> OS.cpu_count  
+>> OS.cpu_count
 => 2 # number of cores, doesn't include hyper-threaded cores.
 
 >> OS.open_file_command
@@ -75,7 +78,7 @@ RUBY_PLATFORM: x86_64-darwin10.6.0
  :VERSION_CODENAME=>"bionic",
  :UBUNTU_CODENAME=>"bionic"}
 ```
-  
+
 If there are any other features you'd like, let me know, I'll do what I can to add them :)
 
 http://github.com/rdp/os for feedback et al

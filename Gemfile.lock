@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    os (1.0.1)
+    os (1.1.1)
 
 GEM
   remote: http://rubygems.org/
@@ -18,7 +18,7 @@ PLATFORMS
 
 DEPENDENCIES
   rake (~> 0.8)
-  rspec (~> 2.5.0)
+  rspec (>= 2.0)
   test-unit (~> 3)
 
 BUNDLED WITH

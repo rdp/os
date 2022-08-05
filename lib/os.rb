@@ -132,6 +132,17 @@ class OS
     mac?
   end
 
+  def self.mac_version
+    `sw_vers -productVersion`.chomp if mac?
+  end
+
+  def self.osx_version
+    mac_version
+  end
+
+  def self.x_version
+    mac_version
+  end
 
   # amount of memory the current process "is using", in RAM
   # (doesn't include any swap memory that it may be using, just that in actual RAM)

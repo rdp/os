@@ -21,6 +21,9 @@ require 'os'
 >> OS.mac? # or OS.osx? or OS.x?
 => false
 
+>> OS.mac_version # or OS.osx_version or OS.x_version
+=> 12.5 # Monterey
+
 >> OS.dev_null
 => "NUL" # or "/dev/null" depending on which platform
 

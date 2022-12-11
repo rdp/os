@@ -10,8 +10,8 @@ RSpec.configure do |config|
   # config.disable_monkey_patching!
 
   config.expect_with :rspec do |c|
-    c.syntax = :should
+    c.syntax = :expect
   end
 
-  config.expect_with :stdlib
+  config.expect_with :test_unit
 end

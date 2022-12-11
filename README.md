@@ -1,5 +1,13 @@
 The OS gem allows for some easy telling if you're on windows or not. 
 
+## Install
+
+```shell
+bundle add os
+```
+
+## Usage
+
 ```ruby
 require 'os'
 
@@ -80,7 +88,7 @@ If there are any other features you'd like, let me know, I'll do what I can to a
 
 http://github.com/rdp/os for feedback et al
 
-Related projects:
+## Alternatives
 
 rubygems:
 
@@ -103,5 +111,16 @@ the ["platform" gem](http://rubydoc.info/github/ffi/ffi/master/FFI/Platform), it
 ```ruby
 FFI::Platform::OS
 ```
+
+## Contributing
+
+Develop locally:
+
+```shell
+bundle install
+bundle exec guard
+```
+
+## License
 
 License: MIT (see LICENSE file)

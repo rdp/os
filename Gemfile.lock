@@ -21,8 +21,7 @@ GEM
       power_assert
 
 PLATFORMS
-  arm64-darwin-21
-  x86_64-darwin-19
+  ruby
 
 DEPENDENCIES
   os!
@@ -31,4 +30,4 @@ DEPENDENCIES
   test-unit (~> 3.5)
 
 BUNDLED WITH
-   2.3.26
+   1.17.3

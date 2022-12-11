@@ -1,3 +1,4 @@
+# encoding: utf-8
 # Third Party Libraries
 require 'rspec'
 

@@ -1,3 +1,4 @@
+# encoding: utf-8
 describe 'For Linux, (Ubuntu, Ubuntu 10.04 LTS) ' do
   before(:each) do
     allow(ENV).to receive(:[]).with('OS')
@@ -18,7 +19,6 @@ describe 'For Linux, (Ubuntu, Ubuntu 10.04 LTS) ' do
     it { is_expected.not_to be_mac }
     it { is_expected.not_to be_osx }
     it { is_expected.not_to be_windows }
-
   end
 
   describe OS::Underlying do
@@ -30,4 +30,3 @@ describe 'For Linux, (Ubuntu, Ubuntu 10.04 LTS) ' do
     it { is_expected.not_to be_windows }
   end
 end
-

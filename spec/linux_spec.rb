@@ -1,8 +1,3 @@
-require 'rubygems' if RUBY_VERSION < '1.9.0'
-
-require File.dirname(__FILE__) + '/../lib/os.rb' # load before sane to avoid sane being able to requir the gemified version...
-require 'rspec' # rspec2
-
 describe 'For Linux, (Ubuntu, Ubuntu 10.04 LTS) ' do
   before(:each) do
     ENV.should_receive(:[]).with('OS').any_number_of_times.and_return()

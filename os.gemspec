@@ -47,17 +47,17 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<rake>.freeze, ["~> 0.8"])
-      s.add_development_dependency(%q<test-unit>.freeze, ["~> 3.2.0"])
-      s.add_development_dependency(%q<rspec>.freeze, ["~> 2.5.0"])
+      s.add_development_dependency(%q<test-unit>.freeze, ["~> 3.5"])
+      s.add_development_dependency(%q<rspec>.freeze, ["~> 2.99"])
     else
       s.add_dependency(%q<rake>.freeze, ["~> 0.8"])
-      s.add_dependency(%q<test-unit>.freeze, ["~> 3.2.0"])
-      s.add_dependency(%q<rspec>.freeze, ["~> 2.5.0"])
+      s.add_dependency(%q<test-unit>.freeze, ["~> 3.5"])
+      s.add_dependency(%q<rspec>.freeze, ["~> 2.99"])
     end
   else
     s.add_dependency(%q<rake>.freeze, ["~> 0.8"])
-    s.add_dependency(%q<test-unit>.freeze, ["~> 3.2.0"])
-    s.add_dependency(%q<rspec>.freeze, ["~> 2.5.0"])
+    s.add_dependency(%q<test-unit>.freeze, ["~> 3.5"])
+    s.add_dependency(%q<rspec>.freeze, ["~> 2.99"])
   end
 end
 

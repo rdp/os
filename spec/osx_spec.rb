@@ -1,5 +1,3 @@
-require File.expand_path('spec_helper.rb', File.dirname(__FILE__))
-
 describe 'For OSX (Snow Leopard, 10.6),' do
   before(:each) do
     ENV.stub!(:[]).with('OS').and_return(nil)

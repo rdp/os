@@ -14,28 +14,14 @@ Gem::Specification.new do |s|
   s.date = "2021-11-07"
   s.description = "The OS gem allows for some useful and easy functions, like OS.windows? (=> true or false) OS.bits ( => 32 or 64) etc\"".freeze
   s.email = "rogerpack2005@gmail.com".freeze
-  s.extra_rdoc_files = [
-    "ChangeLog",
-    "LICENSE",
-    "README.md"
-  ]
   s.files = [
-    ".autotest",
-    ".document",
     "ChangeLog",
     "Gemfile",
-    "Gemfile.lock",
     "LICENSE",
     "README.md",
     "Rakefile",
-    "VERSION",
-    "autotest/discover.rb",
     "lib/os.rb",
     "os.gemspec",
-    "spec/linux_spec.rb",
-    "spec/os_spec.rb",
-    "spec/osx_spec.rb",
-    "spec/spec_helper.rb"
   ]
   s.homepage = "https://github.com/rdp/os".freeze
   s.licenses = ["MIT".freeze]
@@ -45,4 +31,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency(%q<rake>.freeze, ["~> 10.5"])
   s.add_development_dependency(%q<test-unit>.freeze, ["~> 3.5"])
   s.add_development_dependency(%q<rspec>.freeze, ["~> 3.12"])
+  s.add_development_dependency(%q<guard-rspec>.freeze, ["~> 4.7"])
 end

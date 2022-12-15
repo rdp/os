@@ -1,3 +1,4 @@
-source "http://rubygems.org"
+# encoding: utf-8
+source 'http://rubygems.org'
 
 gemspec

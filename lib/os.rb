@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'rbconfig'
 require 'yaml'
 
@@ -24,35 +25,33 @@ class OS
         false
       end
     end
-
   end
 
   # true for linux, os x, cygwin
   def self.posix?
     @posix ||=
-    begin
-      if OS.windows?
-        begin
+      begin
+        if OS.windows?
           begin
-            # what if we're on interix...
-            # untested, of course
-            Process.wait fork{}
-            true
-          rescue NotImplementedError, NoMethodError
-            false
+            begin
+              # what if we're on interix...
+              # untested, of course
+              Process.wait fork {}
+              true
+            rescue NotImplementedError, NoMethodError
+              false
+            end
           end
+        else
+          # assume non windows is posix
+          true
         end
-      else
-        # assume non windows is posix
-        true
       end
-    end
-
   end
 
   # true for linux, false for windows, os x, cygwin
   def self.linux?
-    if (host_os =~ /linux/)
+    if host_os =~ /linux/
       true
     else
       false
@@ -60,7 +59,7 @@ class OS
   end
 
   def self.freebsd?
-    if (host_os =~ /freebsd/)
+    if host_os =~ /freebsd/
       true
     else
       false
@@ -68,13 +67,13 @@ class OS
   end
 
   def self.iron_ruby?
-   @iron_ruby ||= begin
-     if defined?(RUBY_ENGINE) && (RUBY_ENGINE == 'ironruby')
-       true
-     else
-       false
-     end
-   end
+    @iron_ruby ||= begin
+      if defined?(RUBY_ENGINE) && (RUBY_ENGINE == 'ironruby')
+        true
+      else
+        false
+      end
+    end
   end
 
   def self.bits
@@ -97,7 +96,6 @@ class OS
     end
   end
 
-
   def self.java?
     @java ||= begin
       if RUBY_PLATFORM =~ /java/
@@ -110,7 +108,7 @@ class OS
 
   def self.ruby_bin
     @ruby_exe ||= begin
-      File::join(config['bindir'], config['ruby_install_name']) + config['EXEEXT']
+      File.join(config['bindir'], config['ruby_install_name']) + config['EXEEXT']
     end
   end
 
@@ -132,7 +130,6 @@ class OS
     mac?
   end
 
-
   # amount of memory the current process "is using", in RAM
   # (doesn't include any swap memory that it may be using, just that in actual RAM)
   # raises 'unknown' on jruby currently
@@ -149,15 +146,15 @@ class OS
         wmi = nil
         begin
           require 'win32ole'
-          wmi = WIN32OLE.connect("winmgmts://")
+          wmi = WIN32OLE.connect('winmgmts://')
         rescue LoadError, NoMethodError => e # NoMethod for IronRuby currently [sigh]
           raise 'rss unknown for this platform ' + e.to_s
         end
         processes = wmi.ExecQuery("select * from win32_process where ProcessId = #{Process.pid}")
         memory_used = nil
         # only allow for one process...
-        for process in processes
-          raise "multiple processes same pid?" if memory_used
+        processes.each do |process|
+          raise 'multiple processes same pid?' if memory_used
           memory_used = process.WorkingSetSize.to_i
         end
         memory_used
@@ -170,7 +167,6 @@ class OS
   end
 
   class Underlying
-
     def self.bsd?
       OS.osx?
     end
@@ -186,7 +182,6 @@ class OS
     def self.docker?
       system('grep -q docker /proc/self/cgroup') if OS.linux?
     end
-
   end
 
   def self.cygwin?
@@ -202,9 +197,9 @@ class OS
   def self.dev_null # File::NULL in 1.9.3+
     @dev_null ||= begin
       if OS.windows?
-        "NUL"
+        'NUL'
       else
-        "/dev/null"
+        '/dev/null'
       end
     end
   end
@@ -220,98 +215,89 @@ class OS
       'target',
       'target_cpu',
       'target_os',
-      'target_vendor',
+      'target_vendor'
     ]
-    RbConfig::CONFIG.reject {|key, val| !relevant_keys.include? key }.merge({'RUBY_PLATFORM' => RUBY_PLATFORM}).to_yaml
+    RbConfig::CONFIG.reject { |key, _val| !relevant_keys.include? key }.merge('RUBY_PLATFORM' => RUBY_PLATFORM).to_yaml
   end
 
   def self.cpu_count
     @cpu_count ||=
-    case RUBY_PLATFORM
-    when /darwin9/
-      `hwprefs cpu_count`.to_i
-    when /darwin10/
-      (hwprefs_available? ? `hwprefs thread_count` : `sysctl -n hw.ncpu`).to_i
-    when /linux/
-      `cat /proc/cpuinfo | grep processor | wc -l`.to_i
-    when /freebsd/
-      `sysctl -n hw.ncpu`.to_i
-    else
-      if RbConfig::CONFIG['host_os'] =~ /darwin/
-         (hwprefs_available? ? `hwprefs thread_count` : `sysctl -n hw.ncpu`).to_i
-      elsif self.windows?
-        # ENV counts hyper threaded...not good.
-      	      # out = ENV['NUMBER_OF_PROCESSORS'].to_i
-        require 'win32ole'
-        wmi = WIN32OLE.connect("winmgmts://")
-        cpu = wmi.ExecQuery("select NumberOfCores from Win32_Processor") # don't count hyper-threaded in this
-        cpu.to_enum.first.NumberOfCores
+      case RUBY_PLATFORM
+      when /darwin9/
+        `hwprefs cpu_count`.to_i
+      when /darwin10/
+        (hwprefs_available? ? `hwprefs thread_count` : `sysctl -n hw.ncpu`).to_i
+      when /linux/
+        `cat /proc/cpuinfo | grep processor | wc -l`.to_i
+      when /freebsd/
+        `sysctl -n hw.ncpu`.to_i
       else
-        raise 'unknown platform processor_count'
+        if RbConfig::CONFIG['host_os'] =~ /darwin/
+          (hwprefs_available? ? `hwprefs thread_count` : `sysctl -n hw.ncpu`).to_i
+        elsif windows?
+          # ENV counts hyper threaded...not good.
+          # out = ENV['NUMBER_OF_PROCESSORS'].to_i
+          require 'win32ole'
+          wmi = WIN32OLE.connect('winmgmts://')
+          cpu = wmi.ExecQuery('select NumberOfCores from Win32_Processor') # don't count hyper-threaded in this
+          cpu.to_enum.first.NumberOfCores
+        else
+          raise 'unknown platform processor_count'
+        end
       end
-    end
   end
 
   def self.open_file_command
     if OS.cygwin?
-      "cygstart"
+      'cygstart'
     elsif OS.doze?
-      "start"
+      'start'
     elsif OS.mac?
-      "open"
+      'open'
     else
-      "xdg-open"
+      'xdg-open'
     end
   end
 
   def self.app_config_path(name)
     if OS.doze?
-      if ENV['LOCALAPPDATA']
-        return File.join(ENV['LOCALAPPDATA'], name)
-      end
+      return File.join(ENV['LOCALAPPDATA'], name) if ENV['LOCALAPPDATA']
 
       File.join ENV['USERPROFILE'], 'Local Settings', 'Application Data', name
     elsif OS.mac?
       File.join ENV['HOME'], 'Library', 'Application Support', name
     else
-      if ENV['XDG_CONFIG_HOME']
-        return File.join(ENV['XDG_CONFIG_HOME'], name)
-      end
+      return File.join(ENV['XDG_CONFIG_HOME'], name) if ENV['XDG_CONFIG_HOME']
 
       File.join ENV['HOME'], '.config', name
     end
   end
 
   def self.parse_os_release
-    if OS.linux? && File.exist?('/etc/os-release')
-      output = {}
+    raise "File /etc/os-release doesn't exists or not Linux" unless OS.linux? && File.exist?('/etc/os-release')
 
-      File.read('/etc/os-release').each_line do |line|
-        parsed_line = line.chomp.tr('"', '').split('=')
-        next if parsed_line.empty?
-        output[parsed_line[0].to_sym] = parsed_line[1]
-      end
-      output
-    else
-      raise "File /etc/os-release doesn't exists or not Linux"
+    output = {}
+    File.read('/etc/os-release').each_line do |line|
+      parsed_line = line.chomp.tr('"', '').split('=')
+      next if parsed_line.empty?
+      output[parsed_line[0].to_sym] = parsed_line[1]
     end
+    output
   end
 
   class << self
-    alias :doze? :windows? # a joke name but I use it and like it :P
-    alias :jruby? :java?
+    alias doze? windows? # a joke name but I use it and like it :P
+    alias jruby? java?
 
     # delegators for relevant config values
-    %w(host host_cpu host_os).each do |method_name|
+    ['host', 'host_cpu', 'host_os'].each do |method_name|
       define_method(method_name) { config[method_name] }
     end
 
+    private
+
+    def hwprefs_available?
+      `which hwprefs` != ''
+    end
   end
-
-  private
-
-  def self.hwprefs_available?
-    `which hwprefs` != ''
-  end
-
 end

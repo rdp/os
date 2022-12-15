@@ -1,5 +1,3 @@
-require File.expand_path('spec_helper.rb', File.dirname(__FILE__))
-
 describe "OS" do
 
   it "identifies whether windows? or posix?" do
@@ -19,7 +17,7 @@ describe "OS" do
       assert OS.posix? == true
       assert !OS::Underlying.windows?
     else
-      pending "create test"
+      skip "create test"
     end
   end
 
@@ -37,7 +35,7 @@ describe "OS" do
     elsif RUBY_PLATFORM =~ /i386/
       assert OS.bits == 32
     else
-      pending "os bits not tested!" + RUBY_PLATFORM + ' ' +  RbConfig::CONFIG['host_os']
+      skip "os bits not tested!" + RUBY_PLATFORM + ' ' +  RbConfig::CONFIG['host_os']
     end
 
   end
@@ -104,9 +102,9 @@ describe "OS" do
 
   it "should tell you what the right /dev/null is" do
     if OS.windows?
-      OS.dev_null.should == "NUL"
+      expect(OS.dev_null).to eq("NUL")
     else
-      OS.dev_null.should == "/dev/null"
+      expect(OS.dev_null).to eq("/dev/null")
     end
   end
 
@@ -144,19 +142,19 @@ describe "OS" do
   end
 
   it "should provide a path to directory for application config" do
-    ENV.stub(:[])
+    allow(ENV).to receive(:[])
     home = '/home/user'
 
     if OS.mac?
-      ENV.stub(:[]).with('HOME').and_return(home)
+      allow(ENV).to receive(:[]).with('HOME').and_return(home)
       assert OS.app_config_path('appname') == "#{home}/Library/Application Support/appname"
     elsif OS.doze?
       # TODO
     else
-      ENV.stub(:[]).with('HOME').and_return(home)
+      allow(ENV).to receive(:[]).with('HOME').and_return(home)
       assert OS.app_config_path('appname') == "#{home}/.config/appname"
 
-      ENV.stub(:[]).with('XDG_CONFIG_HOME').and_return("#{home}/.config")
+      allow(ENV).to receive(:[]).with('XDG_CONFIG_HOME').and_return("#{home}/.config")
       assert OS.app_config_path('appname') == "#{home}/.config/appname"
     end
   end
@@ -176,14 +174,14 @@ describe OS, "provides access to to underlying config values" do
   describe "#config, supplys the CONFIG hash" do
     subject { OS.config }
 
-    specify { subject.should be_a(Hash) }
+    specify { expect(subject).to be_a(Hash) }
 
     it "should supply 'host_cpu'" do
-      subject['host_cpu'].should eq(RbConfig::CONFIG['host_cpu'])
+      expect(subject['host_cpu']).to eq(RbConfig::CONFIG['host_cpu'])
     end
 
     it "should supply 'host_os'" do
-      subject['host_os'].should eq(RbConfig::CONFIG['host_os'])
+      expect(subject['host_os']).to eq(RbConfig::CONFIG['host_os'])
     end
   end
 
@@ -191,9 +189,9 @@ describe OS, "provides access to to underlying config values" do
     %w(host host_cpu host_os).sort.each do |config_key|
       it "should delegate '#{config_key}'" do
         expected = "TEST #{config_key}"
-        RbConfig::CONFIG.should_receive(:[]).with(config_key).and_return(expected)
+        expect(RbConfig::CONFIG).to receive(:[]).with(config_key).and_return(expected)
 
-        OS.send(config_key).should == expected
+        expect(OS.send(config_key)).to eq(expected)
       end
     end
   end

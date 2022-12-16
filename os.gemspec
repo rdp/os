@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.description = 'The OS gem allows for some useful and easy functions, like OS.windows? (=> true or false) OS.bits ( => 32 or 64) etc"'.freeze
   s.email = 'rogerpack2005@gmail.com'.freeze
   s.files = [
-    'ChangeLog',
+    'CHANGELOG.md',
     'Gemfile',
     'LICENSE',
     'README.md',

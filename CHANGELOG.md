@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#68](https://github.com/rdp/os/pull/68) - Upgrade RSpec to latest (including syntax)
 - [#71](https://github.com/rdp/os/pull/71) - Migrate `autotest` => `guard-rspec`
 - [#72](https://github.com/rdp/os/pull/72) - Rakefile Best Practices (& RuboCop)
+- [#74](https://github.com/rdp/os/pull/74) - Modernize CHANGELOG; adopt Keep a Changelog format
 ### Fixed
 - [#52](https://github.com/rdp/os/pull/52) - http => https typo
 - [#59](https://github.com/rdp/os/pull/59) - 🚑️ Remove circular dependency, fixes #55, #60

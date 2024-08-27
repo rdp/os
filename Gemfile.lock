@@ -43,7 +43,7 @@ GEM
       method_source (~> 1.0)
     rainbow (2.2.2)
       rake
-    rake (10.5.0)
+    rake (12.3.3)
     rb-fsevent (0.11.2)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
@@ -84,7 +84,7 @@ PLATFORMS
 DEPENDENCIES
   guard-rspec (~> 4.7)
   os!
-  rake (~> 10.5)
+  rake (~> 12.3)
   rspec (~> 3.12)
   rubocop-lts (~> 2.0)
   test-unit (~> 3.5)

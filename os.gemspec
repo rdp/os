@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.summary = "Simple and easy way to know if you're on windows or not (reliably), as well as how many bits the OS is, etc.".freeze
 
   s.add_development_dependency('guard-rspec'.freeze, ['~> 4.7'])
-  s.add_development_dependency('rake'.freeze, ['~> 10.5'])
+  s.add_development_dependency('rake'.freeze, ['~> 12.3'])
   s.add_development_dependency('rspec'.freeze, ['~> 3.12'])
   s.add_development_dependency('rubocop-lts'.freeze, ['~> 2.0']) # For Ruby 1.8.7 compat
   s.add_development_dependency('test-unit'.freeze, ['~> 3.5'])

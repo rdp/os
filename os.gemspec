@@ -7,7 +7,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'os'.freeze
-  s.version = '1.1.4'
+  s.version = '1.1.5'
 
   s.required_rubygems_version = Gem::Requirement.new('>= 0'.freeze) if s.respond_to? :required_rubygems_version=
   s.require_paths = ['lib'.freeze]
@@ -28,10 +28,4 @@ Gem::Specification.new do |s|
   s.licenses = ['MIT'.freeze]
   s.rubygems_version = '2.7.6'.freeze
   s.summary = "Simple and easy way to know if you're on windows or not (reliably), as well as how many bits the OS is, etc.".freeze
-
-  s.add_development_dependency('guard-rspec'.freeze, ['~> 4.7'])
-  s.add_development_dependency('rake'.freeze, ['~> 10.5'])
-  s.add_development_dependency('rspec'.freeze, ['~> 3.12'])
-  s.add_development_dependency('rubocop-lts'.freeze, ['~> 2.0']) # For Ruby 1.8.7 compat
-  s.add_development_dependency('test-unit'.freeze, ['~> 3.5'])
 end

@@ -15,4 +15,10 @@ RSpec.configure do |config|
   end
 
   config.expect_with :test_unit
+
+  config.before(:each) do
+    OS.instance_variables.each do |var|
+      OS.remove_instance_variable(var)
+    end
+  end
 end

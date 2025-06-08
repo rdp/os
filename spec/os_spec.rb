@@ -9,7 +9,7 @@ describe 'OS' do
       else
         assert OS.windows? == true
         assert OS.doze? == true
-        assert OS.posix? == false # can fail in error at times...I guess because some other spec has reset ENV on us...
+        assert OS.posix? == false
       end
       assert OS::Underlying.windows?
     elsif [/linux/, /darwin/].any? { |posix_pattern| (RbConfig::CONFIG['host_os'] =~ posix_pattern) || RUBY_PLATFORM =~ posix_pattern }

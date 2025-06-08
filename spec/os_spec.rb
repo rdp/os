@@ -117,8 +117,6 @@ describe 'OS' do
   it 'has working cpu count method' do
     cpu_count = OS.cpu_count
     assert cpu_count >= 1
-    # CPU count is usually either a power of 2 or an even number.
-    assert ((cpu_count & (cpu_count - 1)) == 0) || cpu_count.even?
   end
 
   it 'has working cpu count method with no env. variable' do

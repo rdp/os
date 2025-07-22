@@ -57,7 +57,7 @@ GEM
     shellany (0.0.1)
     test-unit (3.5.5)
       power_assert
-    thor (1.2.1)
+    thor (1.4.0)
 
 PLATFORMS
   arm64-darwin-23

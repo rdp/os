@@ -190,3 +190,16 @@ describe OS, 'provides access to to underlying config values' do
     end
   end
 end
+
+
+describe "OS::Underlying.bsd?" do
+  it "recognizes BSD host families" do
+    %w[darwin23 freebsd14 openbsd7 netbsd10 dragonfly6].each do |host_os|
+      allow(OS).to receive(:host_os).and_return(host_os)
+      expect(OS::Underlying.bsd?).to eq(true)
+    end
+
+    allow(OS).to receive(:host_os).and_return("linux-gnu")
+    expect(OS::Underlying.bsd?).to eq(false)
+  end
+end

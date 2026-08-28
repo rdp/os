@@ -190,3 +190,30 @@ describe OS, 'provides access to to underlying config values' do
     end
   end
 end
+
+
+describe "OS.parse_os_release values" do
+  it "preserves equals signs, empty values, and shell-style quoting" do
+    content = <<~'RELEASE'
+      # comment
+      NAME="a=b"
+      EMPTY=
+      SINGLE='a b'
+      QUOTED="say \"hi\""
+      PATH="a\\b"
+      UNQUOTED=a\ b
+    RELEASE
+    allow(OS).to receive(:linux?).and_return(true)
+    allow(File).to receive(:exist?).with("/etc/os-release").and_return(true)
+    allow(File).to receive(:read).with("/etc/os-release").and_return(content)
+
+    expect(OS.parse_os_release).to eq(
+      NAME: "a=b",
+      EMPTY: "",
+      SINGLE: "a b",
+      QUOTED: 'say "hi"',
+      PATH: "a\\b",
+      UNQUOTED: "a b"
+    )
+  end
+end

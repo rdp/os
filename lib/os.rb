@@ -278,9 +278,17 @@ class OS
 
     output = {}
     File.read('/etc/os-release').each_line do |line|
-      parsed_line = line.chomp.tr('"', '').split('=')
-      next if parsed_line.empty?
-      output[parsed_line[0].to_sym] = parsed_line[1]
+      key, value = line.chomp.split('=', 2)
+      next unless key =~ /\A[A-Za-z_][A-Za-z_0-9]*\z/ && value
+
+      if value[0, 1] == '"' && value[-1, 1] == '"'
+        value = value[1...-1].gsub(/\\([$\x60"\\])/, '\\1')
+      elsif value[0, 1] == "'" && value[-1, 1] == "'"
+        value = value[1...-1]
+      else
+        value = value.gsub(/\\(.)/, '\\1')
+      end
+      output[key.to_sym] = value
     end
     output
   end

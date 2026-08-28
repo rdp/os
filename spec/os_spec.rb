@@ -190,3 +190,16 @@ describe OS, 'provides access to to underlying config values' do
     end
   end
 end
+
+
+describe "OS.posix? capability caching" do
+  it "caches a negative Windows fork probe" do
+    OS.instance_variable_set(:@posix, nil)
+    allow(OS).to receive(:windows?).and_return(true)
+    expect(OS).to receive(:fork).once.and_raise(NotImplementedError)
+
+    2.times { expect(OS.posix?).to eq(false) }
+  ensure
+    OS.instance_variable_set(:@posix, nil)
+  end
+end

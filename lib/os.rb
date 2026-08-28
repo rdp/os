@@ -28,6 +28,8 @@ class OS
 
   # true for linux, os x, cygwin
   def self.posix?
+    return @posix unless @posix.nil?
+
     @posix ||=
       begin
         if OS.windows?

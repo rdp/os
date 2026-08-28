@@ -267,7 +267,8 @@ class OS
     elsif OS.mac?
       File.join ENV['HOME'], 'Library', 'Application Support', name
     else
-      return File.join(ENV['XDG_CONFIG_HOME'], name) if ENV['XDG_CONFIG_HOME']
+      config_home = ENV['XDG_CONFIG_HOME']
+      return File.join(config_home, name) if config_home && config_home.start_with?('/')
 
       File.join ENV['HOME'], '.config', name
     end

@@ -190,3 +190,22 @@ describe OS, 'provides access to to underlying config values' do
     end
   end
 end
+
+
+describe "OS.app_config_path XDG validation" do
+  it "falls back for empty and relative XDG_CONFIG_HOME values" do
+    old_home = ENV["HOME"]
+    old_xdg = ENV["XDG_CONFIG_HOME"]
+    allow(OS).to receive(:mac?).and_return(false)
+    allow(OS).to receive(:doze?).and_return(false)
+    ENV["HOME"] = "/home/user"
+
+    ["", ".", "relative/path"].each do |value|
+      ENV["XDG_CONFIG_HOME"] = value
+      expect(OS.app_config_path("app")).to eq("/home/user/.config/app")
+    end
+  ensure
+    ENV["HOME"] = old_home
+    ENV["XDG_CONFIG_HOME"] = old_xdg
+  end
+end

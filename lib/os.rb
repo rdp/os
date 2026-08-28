@@ -274,10 +274,11 @@ class OS
   end
 
   def self.parse_os_release
-    raise "File /etc/os-release doesn't exists or not Linux" unless OS.linux? && File.exist?('/etc/os-release')
+    path = File.exist?('/etc/os-release') ? '/etc/os-release' : '/usr/lib/os-release'
+    raise "File #{path} doesn't exist or not Linux" unless OS.linux? && File.exist?(path)
 
     output = {}
-    File.read('/etc/os-release').each_line do |line|
+    File.read(path).each_line do |line|
       parsed_line = line.chomp.tr('"', '').split('=')
       next if parsed_line.empty?
       output[parsed_line[0].to_sym] = parsed_line[1]

@@ -190,3 +190,15 @@ describe OS, 'provides access to to underlying config values' do
     end
   end
 end
+
+
+describe "OS.parse_os_release vendor fallback" do
+  it "uses /usr/lib/os-release only when /etc/os-release is absent" do
+    allow(OS).to receive(:linux?).and_return(true)
+    allow(File).to receive(:exist?).with("/etc/os-release").and_return(false)
+    allow(File).to receive(:exist?).with("/usr/lib/os-release").and_return(true)
+    expect(File).to receive(:read).with("/usr/lib/os-release").and_return("ID=vendor\n")
+
+    expect(OS.parse_os_release).to eq(ID: "vendor")
+  end
+end

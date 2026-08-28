@@ -240,7 +240,7 @@ class OS
           require 'win32ole'
           wmi = WIN32OLE.connect('winmgmts://')
           cpu = wmi.ExecQuery('select NumberOfCores from Win32_Processor') # don't count hyper-threaded in this
-          cpu.to_enum.first.NumberOfCores
+          cpu.to_enum.inject(0) { |count, processor| count + processor.NumberOfCores }
         else
           raise 'unknown platform processor_count'
         end

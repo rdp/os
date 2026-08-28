@@ -190,3 +190,25 @@ describe OS, 'provides access to to underlying config values' do
     end
   end
 end
+
+
+describe "OS.cpu_count on Windows" do
+  it "sums physical cores from every processor" do
+    processors = [
+      double(NumberOfCores: 4),
+      double(NumberOfCores: 6)
+    ]
+    wmi = double
+    stub_const("WIN32OLE", double)
+    allow(OS).to receive(:windows?).and_return(true)
+    allow(OS).to receive(:require).with("win32ole").and_return(true)
+    allow(ENV).to receive(:[]).with("NUMBER_OF_PROCESSORS").and_return(nil)
+    allow(WIN32OLE).to receive(:connect).with("winmgmts://").and_return(wmi)
+    allow(wmi).to receive(:ExecQuery).and_return(processors)
+    OS.instance_variable_set(:@cpu_count, nil)
+
+    expect(OS.cpu_count).to eq(10)
+  ensure
+    OS.instance_variable_set(:@cpu_count, nil)
+  end
+end

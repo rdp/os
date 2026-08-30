@@ -28,5 +28,27 @@ describe 'For Linux, (Ubuntu, Ubuntu 10.04 LTS) ' do
 
     it { is_expected.not_to be_bsd }
     it { is_expected.not_to be_windows }
+
+    it 'detects cgroup-v2 Docker containers from the environment file' do
+      allow(File).to receive(:exist?).with('/.dockerenv').and_return(true)
+
+      expect(OS::Underlying.docker?).to eq(true)
+    end
+
+    it 'detects Docker markers in cgroup membership without spawning grep' do
+      allow(File).to receive(:exist?).with('/.dockerenv').and_return(false)
+      allow(File).to receive(:foreach).with('/proc/self/cgroup').and_return([
+        "0::/system.slice/docker-012345.scope\n"
+      ])
+
+      expect(OS::Underlying.docker?).to eq(true)
+    end
+
+    it 'returns false when Docker metadata is unavailable' do
+      allow(File).to receive(:exist?).with('/.dockerenv').and_return(false)
+      allow(File).to receive(:foreach).with('/proc/self/cgroup').and_raise(Errno::ENOENT)
+
+      expect(OS::Underlying.docker?).to eq(false)
+    end
   end
 end

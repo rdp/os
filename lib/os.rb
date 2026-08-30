@@ -179,7 +179,12 @@ class OS
     end
 
     def self.docker?
-      system('grep -q docker /proc/self/cgroup') if OS.linux?
+      return false unless OS.linux?
+      return true if File.exist?('/.dockerenv')
+
+      File.foreach('/proc/self/cgroup').any? { |line| line.include?('docker') }
+    rescue SystemCallError
+      false
     end
   end
 
